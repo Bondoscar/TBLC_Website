@@ -16,7 +16,7 @@ const Home = () => {
               <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl">Our church is your church.</h1>
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/about" className="btn-outline">About Us <ArrowRight size={14} /></Link>
-                <Link to="/myblc" className="btn-solid">Join myBLC <ArrowRight size={14} /></Link>
+                <Link to="/myblc" className="btn-solid">Join TBLC <ArrowRight size={14} /></Link>
               </div>
             </div>
           </div>
@@ -80,13 +80,13 @@ const Home = () => {
       {/* CTA - myBLC */}
       <section className="relative w-full">
         <div className="relative h-[40vh] min-h-[280px]">
-          <img src={bannerImage} alt="myBLC" className="absolute inset-0 w-full h-full object-cover" />
+          <img src={bannerImage} alt="TBLC" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/65" />
           <div className="relative h-full flex items-center justify-center text-center px-6">
             <div>
               <h2 className="section-title">Want to learn more about The Better Life Church?</h2>
               <div className="mt-6">
-                <Link to="/myblc" className="btn-outline">Join myBLC <ArrowRight size={14} /></Link>
+                <Link to="/myblc" className="btn-outline">Join The TBLC Family <ArrowRight size={14} /></Link>
               </div>
             </div>
           </div>

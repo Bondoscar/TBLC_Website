@@ -23,7 +23,7 @@ const MyBLC = () => {
     <div className="bg-black text-white">
       <section className="pt-16 pb-10 px-6 lg:px-10 text-center border-b border-neutral-900">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">NEW BELIEVERS CLASS</div>
-        <h1 className="hero-title text-4xl md:text-6xl">myBLC</h1>
+        <h1 className="hero-title text-4xl md:text-6xl">TBLC</h1>
       </section>
 
       <section className="py-16 px-6 lg:px-10">
@@ -32,17 +32,17 @@ const MyBLC = () => {
             Thank you for your interest in <span className="text-white">myBLC</span>! In our myBLC session we will talk about our church’s story thus far, how to grow in your personal relationship with Jesus, how to experience salvation and how you can get involved at The Better Life Church. Our desire is for Our Church to be Your Church.
           </p>
           <p className="mb-5">We believe that the time we spend together over these three weeks will help connect you to the vision of our church and the purpose God has for your life!</p>
-          <p className="text-white">Our upcoming myBLC classes will be on <span className="font-semibold">April 19, April 26, May 3 at 10am</span>.</p>
+          <p className="text-white">Our upcoming TBLC classes will be on <span className="font-semibold">April 19, April 26, May 3 at 10am</span>.</p>
         </div>
       </section>
 
       <section className="pb-20 px-6 lg:px-10">
         <div className="max-w-[760px] mx-auto border border-neutral-800 p-8 md:p-10">
-          <h2 className="section-title text-center mb-8">Register for myBLC</h2>
+          <h2 className="section-title text-center mb-8">Register for TBLC</h2>
           {submitted ? (
             <div className="text-center">
               <CheckCircle2 size={40} className="mx-auto text-white mb-4" />
-              <div className="serif-display text-2xl font-semibold">Thank you for your interest in myBLC!</div>
+              <div className="serif-display text-2xl font-semibold">Thank you for your interest in TBLC!</div>
               <p className="text-white/75 mt-2">We will be in touch soon!</p>
               <Link to="/" className="btn-outline mt-6 inline-flex">Return to Website</Link>
             </div>
@@ -61,7 +61,7 @@ const MyBLC = () => {
                 <input className="dark-input mt-2" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
               </div>
               <div>
-                <div className="text-xs tracking-[0.2em] text-white/70 mb-3">WILL SOMEONE BE JOINING YOU FOR myBLC?</div>
+                <div className="text-xs tracking-[0.2em] text-white/70 mb-3">WILL SOMEONE BE JOINING YOU FOR TBLC?</div>
                 <div className="flex gap-6">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="radio" name="join" checked={form.joining === 'yes'} onChange={() => setForm({ ...form, joining: 'yes' })} />

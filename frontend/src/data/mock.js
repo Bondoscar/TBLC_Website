@@ -11,11 +11,10 @@ export const navLinks = [
 ];
 
 export const socialLinks = {
-  facebook: 'https://www.facebook.com/capitalcommunitychurch',
-  instagram: 'https://www.instagram.com/ccc_fredericton',
-  youtube: 'https://www.youtube.com/@capitalcommunitychurch',
-  map: 'https://goo.gl/maps/cNU3Zt25Lq4ppFBy5',
-  podcast: 'http://anchor.fm/capitalcommunitychurch',
+  facebook: 'https://www.facebook.com/tblccanada/',
+  instagram: 'https://www.instagram.com/tblccanada/',
+  youtube: 'https://www.youtube.com/@tblccanada',
+  map: 'https://share.google/YBiYbqUp1c0OSFojq',  
 };
 
 export const heroImage = 'https://images.pexels.com/photos/34504326/pexels-photo-34504326.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=1920';
@@ -35,7 +34,7 @@ export const upcomingEvents = [
   },
   {
     id: 2,
-    title: 'myBLC - A Small Group For New Believers',
+    title: 'TBLC - A Small Group For New Believers',
     date: 'April 19, 26, May 3',
     time: 'Sunday Mornings',
     image: 'https://static.wixstatic.com/media/78447e_7e96b4340d9f4d88aacee5df9115ca21~mv2.jpg/v1/fill/w_431,h_243,q_90,enc_avif,quality_auto/78447e_7e96b4340d9f4d88aacee5df9115ca21~mv2.jpg',
@@ -118,8 +117,8 @@ export const sermons = [
   { id: 5, title: 'Let\'s Go Fishing', speaker: 'Harold Linder', duration: '39:54', youtubeId: 'CLZSJqaqXhw' },
   { id: 6, title: 'Jehoiada Must Live', speaker: 'Pastor Matthew Woodward', duration: '45:39', youtubeId: 'HvDrLoSilLM' },
   { id: 7, title: 'There is Victory by the blood of Jesus Christ!', speaker: 'BLC', duration: '00:47', youtubeId: 'vKV-ZnqrubY' },
-  { id: 8, title: 'He paid the price, for us!', speaker: 'BLC', duration: '00:53', youtubeId: 'DpUmzQaWf4M' },
-  { id: 9, title: 'All my sins are washed away', speaker: 'BLC', duration: '00:54', youtubeId: 'uVPWdiwrMTI' },
+  { id: 8, title: 'He paid the price, for us!', speaker: 'TBLC', duration: '00:53', youtubeId: 'DpUmzQaWf4M' },
+  { id: 9, title: 'All my sins are washed away', speaker: 'TBLC', duration: '00:54', youtubeId: 'uVPWdiwrMTI' },
 ];
 
 export const aboutContent = {
@@ -161,9 +160,9 @@ export const newsletters = [
 ];
 
 export const churchInfo = {
-  address: '123 Faith Avenue, Your City',
-  phone: '(555) 123-4567',
-  email: 'info@thebetterlifechurch.org',
+  address: '527 Queen St, Fredericton, NB E3B 1B8',
+  phone: '(506) 304-1107',
+  email: 'info@thebetterlifechurch.com',
   sundayService: '10:00 AM',
   bibleStudy: 'Wednesday 7:00 PM',
   prayer: 'Friday 7:00 PM',
