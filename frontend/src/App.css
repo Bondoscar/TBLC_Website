@@ -1,0 +1,94 @@
+.App { min-height: 100vh; background: #000; }
+
+/* Fonts */
+.ccc-script { font-family: 'Great Vibes', 'Pinyon Script', 'Brush Script MT', cursive; font-weight: 400; letter-spacing: 0.02em; font-style: normal; }
+.serif-display { font-family: 'Cormorant Garamond', 'Times New Roman', serif; }
+
+/* Social icon buttons */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.7);
+  color: #fff;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+.icon-btn:hover { background: #fff; color: #000; }
+
+/* Primary outlined button */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border: 1px solid rgba(255,255,255,0.8);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  background: transparent;
+  transition: background-color .2s ease, color .2s ease;
+  cursor: pointer;
+}
+.btn-outline:hover { background: #fff; color: #000; }
+
+.btn-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border: 1px solid #fff;
+  background: #fff;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  transition: background-color .2s ease, color .2s ease;
+  cursor: pointer;
+}
+.btn-solid:hover { background: transparent; color: #fff; }
+
+/* Section titles */
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 2.5rem;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+/* Card hover */
+.card-hover { transition: transform .35s ease, box-shadow .35s ease; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(255,255,255,0.06); }
+
+/* Hero text */
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+/* Subtle fade in */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeInUp .6s ease both; }
+
+/* Input styles for forms */
+.dark-input {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 12px 14px;
+  width: 100%;
+  transition: border-color .2s ease;
+}
+.dark-input:focus { outline: none; border-color: #fff; }
+.dark-input::placeholder { color: rgba(255,255,255,0.45); }
