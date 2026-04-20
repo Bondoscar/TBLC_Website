@@ -18,8 +18,8 @@ const Header = () => {
               className="h-14 md:h-16 w-auto bg-white rounded-sm p-1"
             />
             <div className="hidden sm:flex flex-col leading-tight">
-              <span className="serif-display text-lg md:text-xl font-semibold text-white tracking-wide">The Better Life</span>
-              <span className="text-[9px] md:text-[10px] tracking-[0.38em] text-white/80 mt-0.5">CHURCH</span>
+              <span className="serif-display text-lg md:text-xl font-semibold text-white tracking-wide">THE BETTER LIFE</span>
+              <span className="serif-display text-lg md:text-xl font-semibold text-white tracking-wide">CHURCH</span>
             </div>
           </Link>
 
@@ -29,8 +29,7 @@ const Header = () => {
               <a href={socialLinks.facebook} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Facebook"><Facebook size={16} /></a>
               <a href={socialLinks.instagram} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Instagram"><Instagram size={16} /></a>
               <a href={socialLinks.youtube} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Youtube"><Youtube size={16} /></a>
-              <a href={socialLinks.map} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Location"><MapPin size={16} /></a>
-              <a href={socialLinks.podcast} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Podcast"><Mic size={16} /></a>
+              <a href={socialLinks.map} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Location"><MapPin size={16} /></a>              
             </div>
             <nav className="flex items-center gap-7">
               {navLinks.map((l) => (

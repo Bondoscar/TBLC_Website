@@ -15,8 +15,8 @@ const Footer = () => {
               className="h-14 w-auto bg-white rounded-sm p-1"
             />
             <div className="flex flex-col leading-tight">
-              <span className="serif-display text-lg font-semibold text-white tracking-wide">The Better Life</span>
-              <span className="text-[9px] tracking-[0.38em] text-white/80 mt-0.5">CHURCH</span>
+              <span className="serif-display text-lg font-semibold text-white tracking-wide">THE BETTER LIFE</span>
+              <span className="serif-display text-lg font-semibold text-white tracking-wide">CHURCH</span>
             </div>
           </div>
           <p className="text-white/70 text-sm leading-relaxed">
@@ -44,12 +44,11 @@ const Footer = () => {
             <a href={socialLinks.facebook} target="_blank" rel="noreferrer" className="icon-btn"><Facebook size={16} /></a>
             <a href={socialLinks.instagram} target="_blank" rel="noreferrer" className="icon-btn"><Instagram size={16} /></a>
             <a href={socialLinks.youtube} target="_blank" rel="noreferrer" className="icon-btn"><Youtube size={16} /></a>
-            <a href={socialLinks.map} target="_blank" rel="noreferrer" className="icon-btn"><MapPin size={16} /></a>
-            <a href={socialLinks.podcast} target="_blank" rel="noreferrer" className="icon-btn"><Mic size={16} /></a>
+            <a href={socialLinks.map} target="_blank" rel="noreferrer" className="icon-btn"><MapPin size={16} /></a>            
           </div>
           <ul className="space-y-2 text-sm">
             <li><Link to="/give" className="text-white/70 hover:text-white">Give</Link></li>
-            <li><Link to="/myblc" className="text-white/70 hover:text-white">myBLC</Link></li>
+            <li><Link to="/myblc" className="text-white/70 hover:text-white">TBLC</Link></li>
             <li><Link to="/resources" className="text-white/70 hover:text-white">Resources</Link></li>
             <li><Link to="/events" className="text-white/70 hover:text-white">Events</Link></li>
           </ul>
