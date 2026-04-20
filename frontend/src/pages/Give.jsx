@@ -32,21 +32,21 @@ const Give = () => {
             <a href="https://tithe.ly/give?c=674912" target="_blank" rel="noreferrer" className="border border-neutral-800 p-8 card-hover block">
               <CreditCard size={28} className="text-white mb-4" />
               <h3 className="serif-display text-xl font-semibold mb-2">Online Giving via Tithely</h3>
-              <p className="text-white/70 text-sm leading-relaxed">A safe and easy way to support the ministries of Capital Community Church either with a one-time or recurring donation.</p>
+              <p className="text-white/70 text-sm leading-relaxed">A safe and easy way to support the ministries of The Better Life Church either with a one-time or recurring donation.</p>
             </a>
             <a href="https://www.paypal.com" target="_blank" rel="noreferrer" className="border border-neutral-800 p-8 card-hover block">
               <Heart size={28} className="text-white mb-4" />
               <h3 className="serif-display text-xl font-semibold mb-2">PayPal Donations</h3>
               <p className="text-white/70 text-sm leading-relaxed">Support the church by making a one-time contribution or establishing a recurring contribution through PayPal.</p>
             </a>
-            <a href="mailto:donations@capitalcommunity.ca" className="border border-neutral-800 p-8 card-hover block">
+            <a href="mailto:donations@thebetterlifechurch.org" className="border border-neutral-800 p-8 card-hover block">
               <Mail size={28} className="text-white mb-4" />
               <h3 className="serif-display text-xl font-semibold mb-2">Interac E-Transfer</h3>
-              <p className="text-white/70 text-sm leading-relaxed">Available by sending to email: donations@capitalcommunity.ca</p>
+              <p className="text-white/70 text-sm leading-relaxed">Available by sending to email: donations@thebetterlifechurch.org</p>
             </a>
           </div>
           <p className="text-center text-white/70 mt-12 max-w-[780px] mx-auto leading-relaxed">
-            Thank you for your faithful support of Capital Community Church and its ministries. It is because of your regular giving that we can reach out locally and online in proclaiming the gospel of Jesus Christ!
+            Thank you for your faithful support of The Better Life Church and its ministries. It is because of your regular giving that we can reach out locally and online in proclaiming the gospel of Jesus Christ!
           </p>
         </div>
       </section>

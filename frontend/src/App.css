@@ -1,5 +1,17 @@
 .App { min-height: 100vh; background: #000; }
 
+/* Brand accent colors from logo */
+:root {
+  --brand-blue: #293B8C;
+  --brand-gold: #E8B820;
+}
+
+.brand-gold { color: var(--brand-gold); }
+.brand-blue { color: var(--brand-blue); }
+.bg-brand-blue { background-color: var(--brand-blue); }
+.bg-brand-gold { background-color: var(--brand-gold); }
+.border-brand-gold { border-color: var(--brand-gold); }
+
 /* Fonts */
 .ccc-script { font-family: 'Great Vibes', 'Pinyon Script', 'Brush Script MT', cursive; font-weight: 400; letter-spacing: 0.02em; font-style: normal; }
 .serif-display { font-family: 'Cormorant Garamond', 'Times New Roman', serif; }
@@ -42,16 +54,17 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 26px;
-  border: 1px solid #fff;
-  background: #fff;
-  color: #000;
+  border: 1px solid var(--brand-gold);
+  background: var(--brand-gold);
+  color: #1a1a1a;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-size: 12px;
-  transition: background-color .2s ease, color .2s ease;
+  font-weight: 600;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
   cursor: pointer;
 }
-.btn-solid:hover { background: transparent; color: #fff; }
+.btn-solid:hover { background: transparent; color: var(--brand-gold); }
 
 /* Section titles */
 .section-title {

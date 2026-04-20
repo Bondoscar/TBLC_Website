@@ -29,7 +29,7 @@ const Resources = () => {
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[900px] mx-auto">
           <h2 className="section-title text-center mb-3">Sign up for our weekly newsletter</h2>
-          <p className="text-white/65 text-center mb-8">Stay connected with everything happening at CCC.</p>
+          <p className="text-white/65 text-center mb-8">Stay connected with everything happening at The Better Life Church.</p>
           {subscribed ? (
             <div className="border border-neutral-800 p-8 text-center">
               <CheckCircle2 size={36} className="mx-auto text-white mb-3" />

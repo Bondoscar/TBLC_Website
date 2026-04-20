@@ -10,7 +10,7 @@ const Events = () => {
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">EVENTS</div>
         <h1 className="hero-title text-4xl md:text-6xl">Upcoming Events</h1>
         <p className="mt-5 text-white/70 max-w-[700px] mx-auto">
-          Stay connected with what’s happening at Capital Community Church.
+          Stay connected with what’s happening at The Better Life Church.
         </p>
       </section>
 
@@ -29,7 +29,7 @@ const Events = () => {
                 </div>
                 <p className="mt-4 text-white/75 leading-relaxed">{e.description}</p>
                 <div className="mt-6">
-                  <Link to="/myccc" className="btn-outline">Sign Up <ArrowRight size={14} /></Link>
+                  <Link to="/myblc" className="btn-outline">Sign Up <ArrowRight size={14} /></Link>
                 </div>
               </div>
             </div>

@@ -12,12 +12,15 @@ const Header = () => {
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0">
-            <div className="flex flex-col items-end leading-tight">
-              <span className="ccc-script text-[32px] md:text-[40px] text-white leading-[0.85]">capital</span>
-              <span className="text-[8px] md:text-[9px] tracking-[0.38em] text-white/90 mt-0.5">COMMUNITY</span>
-              <span className="text-[8px] md:text-[9px] tracking-[0.38em] text-white/90">CHURCH</span>
+            <img
+              src="https://customer-assets.emergentagent.com/job_community-site-clone/artifacts/0yn2y1tq_image.png"
+              alt="The Better Life Church"
+              className="h-14 md:h-16 w-auto bg-white rounded-sm p-1"
+            />
+            <div className="hidden sm:flex flex-col leading-tight">
+              <span className="serif-display text-lg md:text-xl font-semibold text-white tracking-wide">The Better Life</span>
+              <span className="text-[9px] md:text-[10px] tracking-[0.38em] text-white/80 mt-0.5">CHURCH</span>
             </div>
-            <div className="ccc-script text-5xl md:text-6xl text-white leading-none">CCC</div>
           </Link>
 
           {/* Social + Nav (desktop) */}

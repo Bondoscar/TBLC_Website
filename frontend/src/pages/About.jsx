@@ -78,7 +78,7 @@ const About = () => {
       <section className="py-20 px-6 lg:px-10 text-center border-t border-neutral-900">
         <h2 className="section-title mb-5">Come Visit Us</h2>
         <p className="text-white/75 max-w-[600px] mx-auto mb-8">We’d love to meet you this Sunday. Our services are warm, welcoming, and designed to help you encounter God.</p>
-        <Link to="/myccc" className="btn-outline">Join myCCC <ArrowRight size={14} /></Link>
+        <Link to="/myblc" className="btn-outline">Join myBLC <ArrowRight size={14} /></Link>
       </section>
     </div>
   );

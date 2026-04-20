@@ -9,12 +9,15 @@ const Footer = () => {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex flex-col items-end leading-tight">
-              <span className="ccc-script text-[28px] text-white leading-[0.85]">capital</span>
-              <span className="text-[8px] tracking-[0.38em] text-white/90 mt-0.5">COMMUNITY</span>
-              <span className="text-[8px] tracking-[0.38em] text-white/90">CHURCH</span>
+            <img
+              src="https://customer-assets.emergentagent.com/job_community-site-clone/artifacts/0yn2y1tq_image.png"
+              alt="The Better Life Church"
+              className="h-14 w-auto bg-white rounded-sm p-1"
+            />
+            <div className="flex flex-col leading-tight">
+              <span className="serif-display text-lg font-semibold text-white tracking-wide">The Better Life</span>
+              <span className="text-[9px] tracking-[0.38em] text-white/80 mt-0.5">CHURCH</span>
             </div>
-            <div className="ccc-script text-5xl text-white leading-none">CCC</div>
           </div>
           <p className="text-white/70 text-sm leading-relaxed">
             A progressive, visionary congregation with a passion for real spirituality, a love for family, a heart for community, and a zest for life.
@@ -46,7 +49,7 @@ const Footer = () => {
           </div>
           <ul className="space-y-2 text-sm">
             <li><Link to="/give" className="text-white/70 hover:text-white">Give</Link></li>
-            <li><Link to="/myccc" className="text-white/70 hover:text-white">myCCC</Link></li>
+            <li><Link to="/myblc" className="text-white/70 hover:text-white">myBLC</Link></li>
             <li><Link to="/resources" className="text-white/70 hover:text-white">Resources</Link></li>
             <li><Link to="/events" className="text-white/70 hover:text-white">Events</Link></li>
           </ul>
@@ -54,8 +57,8 @@ const Footer = () => {
       </div>
       <div className="border-t border-neutral-900">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-5 text-xs text-white/50 flex flex-col md:flex-row justify-between gap-2">
-          <span>© {new Date().getFullYear()} Capital Community Church. All rights reserved.</span>
-          <span>Fredericton, New Brunswick, Canada</span>
+          <span>© {new Date().getFullYear()} The Better Life Church. All rights reserved.</span>
+          <span>The Better Life Church</span>
         </div>
       </div>
     </footer>

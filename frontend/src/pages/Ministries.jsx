@@ -5,10 +5,10 @@ const Ministries = () => {
   return (
     <div className="bg-black text-white">
       <section className="pt-16 pb-10 px-6 lg:px-10 text-center border-b border-neutral-900">
-        <div className="text-xs tracking-[0.3em] text-white/60 mb-3">CCC</div>
+        <div className="text-xs tracking-[0.3em] text-white/60 mb-3">BLC</div>
         <h1 className="hero-title text-4xl md:text-6xl">Ministries</h1>
         <p className="mt-5 text-white/70 max-w-[700px] mx-auto">
-          There is a place for you at Capital Community Church. Explore our ministries and find your community.
+          There is a place for you at The Better Life Church. Explore our ministries and find your community.
         </p>
       </section>
 
