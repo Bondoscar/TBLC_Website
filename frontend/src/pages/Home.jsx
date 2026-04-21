@@ -68,7 +68,7 @@ const Home = () => {
                   Join us live on Sunday at <span className="text-white">10AM</span> and Wednesday at <span className="text-white">7PM</span>, or catch up on a service you missed.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <a href="http://capitalcommunity.tv/" target="_blank" rel="noreferrer" className="btn-solid"><Play size={14} /> Live Services</a>
+                  <a href="https://www.youtube.com/@tblccanada/streams" target="_blank" rel="noreferrer" className="btn-solid"><Play size={14} /> Live Services</a>
                   <Link to="/media" className="btn-outline">Archived Services</Link>
                 </div>
               </div>

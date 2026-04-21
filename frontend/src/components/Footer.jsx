@@ -16,6 +16,7 @@ const Footer = () => {
             />
             <div className="flex flex-col leading-tight">
               <span className="serif-display text-lg font-semibold text-white tracking-wide">THE BETTER LIFE</span>
+              {/* <span className="text-[9px] tracking-[0.38em] text-white/80 mt-0.5">CHURCH</span> */}
               <span className="serif-display text-lg font-semibold text-white tracking-wide">CHURCH</span>
             </div>
           </div>
