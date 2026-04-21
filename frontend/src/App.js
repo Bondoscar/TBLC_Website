@@ -15,7 +15,7 @@ import { Toaster } from './components/ui/toaster';
 
 function App() {
   return (
-    <div className="App min-h-screen bg-black">
+    <div className="App min-h-screen" style={{background: 'linear-gradient(135deg, #1a2a4a 0%, #1e3a5f 100%)'}}>
       <BrowserRouter>
         <Header />
         <Routes>

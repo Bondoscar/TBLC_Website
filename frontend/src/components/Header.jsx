@@ -7,7 +7,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="w-full bg-black text-white sticky top-0 z-50 border-b border-neutral-900">
+    <header className="w-full bg-blue-950 text-white sticky top-0 z-50 border-b border-blue-900">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-4">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
@@ -61,7 +61,7 @@ const Header = () => {
 
         {/* Mobile menu */}
         {open && (
-          <div className="lg:hidden mt-4 pb-3 border-t border-neutral-800 pt-4">
+          <div className="lg:hidden mt-4 pb-3 border-t border-blue-800 pt-4">
             <nav className="flex flex-col gap-3">
               {navLinks.map((l) => (
                 <NavLink

@@ -5,12 +5,12 @@ import { heroImage, worshipImage, bannerImage, upcomingEvents, churchInfo, socia
 
 const Home = () => {
   return (
-    <div className="bg-black text-white">
+    <div className="bg-blue-950 text-white">
       {/* Hero */}
       <section className="relative w-full overflow-hidden">
         <div className="relative h-[70vh] md:h-[80vh] max-h-[780px] min-h-[420px]">
           <img src={heroImage} alt="Worship" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-950/50 via-blue-950/30 to-blue-950/70" />
           <div className="relative z-10 flex items-center justify-center h-full px-6">
             <div className="text-center fade-up">
               <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl">Our church is your church.</h1>
@@ -33,7 +33,7 @@ const Home = () => {
                 <div className="aspect-[16/9] overflow-hidden">
                   <img src={e.image} alt={e.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-950/80 via-blue-950/20 to-transparent flex flex-col justify-end p-6">
                   <div className="text-xs tracking-[0.2em] text-white/70 mb-1">{e.date} · {e.time}</div>
                   <h3 className="serif-display text-xl md:text-2xl font-semibold">{e.title}</h3>
                 </div>
@@ -47,7 +47,7 @@ const Home = () => {
       <section className="relative w-full">
         <div className="relative">
           <img src={worshipImage} alt="Worship with us" className="w-full h-[70vh] md:h-[85vh] object-cover" />
-          <div className="absolute inset-0 bg-black/55" />
+          <div className="absolute inset-0 bg-blue-950/55" />
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-[1200px] mx-auto w-full px-6 lg:px-10 grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="fade-up">
@@ -81,7 +81,7 @@ const Home = () => {
       <section className="relative w-full">
         <div className="relative h-[40vh] min-h-[280px]">
           <img src={bannerImage} alt="TBLC" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/65" />
+          <div className="absolute inset-0 bg-blue-950/65" />
           <div className="relative h-full flex items-center justify-center text-center px-6">
             <div>
               <h2 className="section-title">Want to learn more about The Better Life Church?</h2>

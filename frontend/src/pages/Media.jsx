@@ -6,8 +6,8 @@ const Media = () => {
   const [current, setCurrent] = useState(null);
 
   return (
-    <div className="bg-black text-white">
-      <section className="pt-16 pb-10 px-6 lg:px-10 text-center border-b border-neutral-900">
+    <div className="bg-blue-950 text-white">
+      <section className="pt-16 pb-10 px-6 lg:px-10 text-center border-b border-blue-900">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">MEDIA</div>
         <h1 className="hero-title text-4xl md:text-6xl">Archived Services</h1>
         <p className="mt-5 text-white/75 max-w-[760px] mx-auto">
@@ -29,13 +29,13 @@ const Media = () => {
                   alt={s.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors" />
+                <div className="absolute inset-0 bg-blue-950/30 group-hover:bg-blue-950/10 transition-colors" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-14 h-14 rounded-full bg-white/90 text-black flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Play size={22} fill="#000" />
                   </div>
                 </div>
-                <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1">{s.duration}</div>
+                <div className="absolute bottom-2 right-2 bg-blue-950/80 text-white text-xs px-2 py-1">{s.duration}</div>
               </div>
               <div className="pt-4">
                 <h3 className="serif-display text-lg font-semibold">{s.title}</h3>
@@ -48,7 +48,7 @@ const Media = () => {
 
       {/* Video modal */}
       {current && (
-        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center px-4 py-6" onClick={() => setCurrent(null)}>
+        <div className="fixed inset-0 z-[100] bg-blue-950/90 flex items-center justify-center px-4 py-6" onClick={() => setCurrent(null)}>
           <div className="relative w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setCurrent(null)}
@@ -56,7 +56,7 @@ const Media = () => {
             >
               CLOSE <X size={18} />
             </button>
-            <div className="aspect-video w-full bg-black">
+            <div className="aspect-video w-full bg-blue-950">
               <iframe
                 src={`https://www.youtube.com/embed/${current.youtubeId}?autoplay=1`}
                 title={current.title}

@@ -1,4 +1,4 @@
-.App { min-height: 100vh; background: #000; }
+.App { min-height: 100vh; background: #1a2a4a; }
 
 /* Brand accent colors from logo */
 :root {
@@ -28,7 +28,7 @@
   color: #fff;
   transition: background-color .2s ease, color .2s ease, border-color .2s ease;
 }
-.icon-btn:hover { background: #fff; color: #000; }
+.icon-btn:hover { background: #fff; color: #1a2a4a; }
 
 /* Primary outlined button */
 .btn-outline {
@@ -46,7 +46,7 @@
   transition: background-color .2s ease, color .2s ease;
   cursor: pointer;
 }
-.btn-outline:hover { background: #fff; color: #000; }
+.btn-outline:hover { background: #fff; color: #1a2a4a; }
 
 .btn-solid {
   display: inline-flex;

@@ -5,8 +5,8 @@ import { upcomingEvents } from '../data/mock';
 
 const Events = () => {
   return (
-    <div className="bg-black text-white">
-      <section className="pt-16 pb-10 px-6 lg:px-10 text-center border-b border-neutral-900">
+    <div className="bg-blue-950 text-white">
+      <section className="pt-16 pb-10 px-6 lg:px-10 text-center border-b border-blue-900">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">EVENTS</div>
         <h1 className="hero-title text-4xl md:text-6xl">Upcoming Events</h1>
         <p className="mt-5 text-white/70 max-w-[700px] mx-auto">
@@ -17,7 +17,7 @@ const Events = () => {
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           {upcomingEvents.map((e) => (
-            <div key={e.id} className="border border-neutral-800 card-hover overflow-hidden">
+            <div key={e.id} className="border border-blue-800 card-hover overflow-hidden">
               <div className="aspect-[16/9] overflow-hidden">
                 <img src={e.image} alt={e.title} className="w-full h-full object-cover" />
               </div>
