@@ -7,8 +7,8 @@ export const navLinks = [
   // { name: 'MINISTRIES', path: '/ministries' },
   { name: 'MEDIA', path: '/media' },
   { name: 'EVENTS', path: '/events' },
-  { name: 'GIVE', path: '/give' },
-  { name: 'RESOURCES', path: '/resources' },
+  { name: 'DONATE', path: '/Donate' },
+  // { name: 'RESOURCES', path: '/resources' },
 ];
 
 export const socialLinks = {

@@ -48,9 +48,9 @@ const Footer = () => {
             <a href={socialLinks.map} target="_blank" rel="noreferrer" className="icon-btn"><MapPin size={16} /></a>            
           </div>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/give" className="text-white/70 hover:text-white">Give</Link></li>
+            <li><Link to="/Donate" className="text-white/70 hover:text-white">Donate</Link></li>
             <li><Link to="/myblc" className="text-white/70 hover:text-white">TBLC</Link></li>
-            <li><Link to="/resources" className="text-white/70 hover:text-white">Resources</Link></li>
+            {/* <li><Link to="/resources" className="text-white/70 hover:text-white">Resources</Link></li> */}
             <li><Link to="/events" className="text-white/70 hover:text-white">Events</Link></li>
           </ul>
         </div>

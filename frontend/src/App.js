@@ -8,7 +8,7 @@ import About from './pages/About';
 import Ministries from './pages/Ministries';
 import Media from './pages/Media';
 import Events from './pages/Events';
-import Give from './pages/Give';
+import Donate from './pages/Donate';
 import Resources from './pages/Resources';
 import MyBLC from './pages/MyBLC';
 import { Toaster } from './components/ui/toaster';
@@ -24,7 +24,7 @@ function App() {
           <Route path="/ministries" element={<Ministries />} />
           <Route path="/media" element={<Media />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/give" element={<Give />} />
+          <Route path="/Donate" element={<Donate />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/myblc" element={<MyBLC />} />
           <Route path="/myccc" element={<Navigate to="/myblc" replace />} />

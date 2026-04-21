@@ -10,8 +10,8 @@ const Give = () => {
         <div className="absolute inset-0 bg-black/65" />
         <div className="relative h-full flex items-center justify-center text-center px-6">
           <div>
-            <div className="text-xs tracking-[0.3em] text-white/70 mb-3">GIVE</div>
-            <h1 className="hero-title text-4xl md:text-6xl">Giving</h1>
+            <div className="text-xs tracking-[0.3em] text-white/70 mb-3">Donate</div>
+            <h1 className="hero-title text-4xl md:text-6xl">Donation</h1>
           </div>
         </div>
       </section>
@@ -19,15 +19,15 @@ const Give = () => {
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[900px] mx-auto">
           <blockquote className="serif-display text-xl md:text-2xl italic text-white/85 text-center leading-relaxed">
-            “Give and it will be given to you. A good measure, pressed down, shaken together and running over, will be poured into your lap. For with the measure you use, it will be measured to you.”
-            <footer className="text-sm not-italic tracking-[0.2em] text-white/60 mt-4">— LUKE 6:38</footer>
+            “God Loves a cheerful giver”
+            <footer className="text-sm not-italic tracking-[0.2em] text-white/60 mt-4">— 2 Corinthians 9:7</footer>
           </blockquote>
         </div>
       </section>
 
       <section className="pb-20 px-6 lg:px-10">
         <div className="max-w-[1100px] mx-auto">
-          <h2 className="section-title text-center mb-10">How to Give</h2>
+          <h2 className="section-title text-center mb-10">How to Donate</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/*     <a href="https://tithe.ly/give?c=674912" target="_blank" rel="noreferrer" className="border border-neutral-800 p-8 card-hover block">
               <CreditCard size={28} className="text-white mb-4" />
@@ -46,7 +46,7 @@ const Give = () => {
             </a>
           </div>
           <p className="text-center text-white/70 mt-12 max-w-[780px] mx-auto leading-relaxed">
-            Thank you for your faithful support of The Better Life Church and its ministries. It is because of your regular giving that we can reach out locally and online in proclaiming the gospel of Jesus Christ!
+            Thank you for your faithful support of The Better Life Church. It is because of your regular donations that we can reach out locally and online in proclaiming the gospel of Jesus Christ!
           </p>
         </div>
       </section>
