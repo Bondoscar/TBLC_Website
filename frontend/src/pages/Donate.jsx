@@ -29,17 +29,17 @@ const Give = () => {
         <div className="max-w-[1100px] mx-auto">
           <h2 className="section-title text-center mb-10">How to Donate</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/*     <a href="https://tithe.ly/give?c=674912" target="_blank" rel="noreferrer" className="border border-blue-800 p-8 card-hover block">
+        {/*     <a href="https://tithe.ly/give?c=674912" target="_blank" rel="noreferrer" className="p-8 card-hover block">
               <CreditCard size={28} className="text-white mb-4" />
               <h3 className="serif-display text-xl font-semibold mb-2">Online Giving via Tithely</h3>
               <p className="text-white/70 text-sm leading-relaxed">A safe and easy way to support the ministries of The Better Life Church either with a one-time or recurring donation.</p>
             </a>
-            <a href="https://www.paypal.com" target="_blank" rel="noreferrer" className="border border-blue-800 p-8 card-hover block">
+            <a href="https://www.paypal.com" target="_blank" rel="noreferrer" className="border-2 border-white/20 p-8 card-hover block">
               <Heart size={28} className="text-white mb-4" />
               <h3 className="serif-display text-xl font-semibold mb-2">PayPal Donations</h3>
               <p className="text-white/70 text-sm leading-relaxed">Support the church by making a one-time contribution or establishing a recurring contribution through PayPal.</p>
             </a> */}
-            <a href="mailto:tblccanada@gmail.com" className="border border-blue-800 p-8 card-hover block">
+            <a href="mailto:tblccanada@gmail.com" className="border-2 border-white/20 p-8 card-hover block">
               <Mail size={28} className="text-white mb-4" />
               <h3 className="serif-display text-xl font-semibold mb-2">Interac E-Transfer</h3>
               <p className="text-white/70 text-sm leading-relaxed">Available by sending to email: tblccanada@gmail.com</p>

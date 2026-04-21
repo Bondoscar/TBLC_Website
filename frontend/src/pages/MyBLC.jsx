@@ -21,7 +21,7 @@ const MyBLC = () => {
 
   return (
     <div className="bg-blue-950 text-white">
-      <section className="pt-16 pb-10 px-6 lg:px-10 text-center border-b border-blue-900">
+      <section className="pt-16 pb-10 px-6 lg:px-10 text-center">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">NEW BELIEVERS CLASS</div>
         <h1 className="hero-title text-4xl md:text-6xl">TBLC</h1>
       </section>
@@ -37,7 +37,7 @@ const MyBLC = () => {
       </section>
 
       <section className="pb-20 px-6 lg:px-10">
-        <div className="max-w-[760px] mx-auto border border-blue-800 p-8 md:p-10">
+        <div className="max-w-[760px] mx-auto p-8 md:p-10 border-2 border-white/20">
           <h2 className="section-title text-center mb-8">Register for TBLC</h2>
           {submitted ? (
             <div className="text-center">

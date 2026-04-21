@@ -5,7 +5,7 @@ import { socialLinks, churchInfo } from '../data/mock';
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-950 text-white border-t border-blue-900">
+    <footer className="bg-blue-950 text-white border-t-2 border-white/20">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-4">
@@ -55,7 +55,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div className="border-t border-blue-900">
+      <div>
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-5 text-xs text-white/50 flex flex-col md:flex-row justify-between gap-2">
           <span>© {new Date().getFullYear()} The Better Life Church. All rights reserved.</span>
           <span>The Better Life Church</span>

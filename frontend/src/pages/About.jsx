@@ -28,12 +28,12 @@ const About = () => {
       {/* Mission + Vision */}
       <section className="px-6 lg:px-10 pb-20">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="border border-blue-800 p-10 card-hover">
+          <div className="p-10 card-hover border-2 border-white/20">
             <div className="text-xs tracking-[0.3em] text-white/60 mb-3">OUR MISSION</div>
             <h3 className="serif-display text-2xl font-semibold mb-4">To know Christ and make Him known</h3>
             <p className="text-white/75 leading-relaxed">{aboutContent.mission}</p>
           </div>
-          <div className="border border-blue-800 p-10 card-hover">
+          <div className="p-10 card-hover border-2 border-white/20">
             <div className="text-xs tracking-[0.3em] text-white/60 mb-3">OUR VISION</div>
             <h3 className="serif-display text-2xl font-semibold mb-4">A family of believers</h3>
             <p className="text-white/75 leading-relaxed">{aboutContent.vision}</p>
@@ -42,7 +42,7 @@ const About = () => {
       </section>
 
       {/* Beliefs */}
-      <section className="py-20 px-6 lg:px-10 border-t border-blue-900">
+      <section className="py-20 px-6 lg:px-10">
         <div className="max-w-[900px] mx-auto">
           <h2 className="section-title text-center mb-12">What We Believe</h2>
           <ul className="space-y-4">
@@ -57,7 +57,7 @@ const About = () => {
       </section>
 
       {/* Pastors */}
-      <section className="py-20 px-6 lg:px-10 border-t border-blue-900">
+      <section className="py-20 px-6 lg:px-10">
         <div className="max-w-[1200px] mx-auto">
           <h2 className="section-title text-center mb-12">Our Team</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -75,7 +75,7 @@ const About = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 lg:px-10 text-center border-t border-blue-900">
+      <section className="py-20 px-6 lg:px-10 text-center">
         <h2 className="section-title mb-5">Come Visit Us</h2>
         <p className="text-white/75 max-w-[600px] mx-auto mb-8">We’d love to meet you this Sunday. Our services are warm, welcoming, and designed to help you encounter God.</p>
         <Link to="/myblc" className="btn-outline">Join The TBLC Family <ArrowRight size={14} /></Link>

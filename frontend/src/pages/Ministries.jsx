@@ -4,7 +4,7 @@ import { ministries } from '../data/mock';
 const Ministries = () => {
   return (
     <div className="bg-blue-950 text-white">
-      <section className="pt-16 pb-10 px-6 lg:px-10 text-center border-b border-blue-900">
+      <section className="pt-16 pb-10 px-6 lg:px-10 text-center">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">TBLC</div>
         <h1 className="hero-title text-4xl md:text-6xl">Ministries</h1>
         <p className="mt-5 text-white/70 max-w-[700px] mx-auto">
