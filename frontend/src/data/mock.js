@@ -1,4 +1,5 @@
 // Mock data for The Better Life Church clone
+import { images, getImageUrl } from './images';
 
 export const navLinks = [
   { name: 'HOME', path: '/' },
@@ -17,11 +18,11 @@ export const socialLinks = {
   map: 'https://share.google/YBiYbqUp1c0OSFojq',  
 };
 
-export const heroImage = 'https://images.pexels.com/photos/34504326/pexels-photo-34504326.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=1920';
+export const heroImage = getImageUrl(images.hero, images.heroFallback);
 
-export const worshipImage = 'https://images.unsplash.com/photo-1521547418549-6a31aad7c177?crop=entropy&cs=srgb&fm=jpg&q=85&w=1920';
+export const worshipImage = getImageUrl(images.worship, images.worshipFallback);
 
-export const bannerImage = 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1920&h=600&fit=crop&q=80';
+export const bannerImage = getImageUrl(images.banner, images.bannerFallback);
 
 export const upcomingEvents = [
   {
@@ -29,7 +30,7 @@ export const upcomingEvents = [
     title: 'Guest Speaker - Barron Longstreth',
     date: 'Sunday, April 19',
     time: '10AM',
-    image: 'https://static.wixstatic.com/media/78447e_dab6f75cd6bd45fdbd81c9558621efa9~mv2.jpg/v1/fill/w_432,h_243,q_90,enc_avif,quality_auto/78447e_dab6f75cd6bd45fdbd81c9558621efa9~mv2.jpg',
+    image: getImageUrl(images.events.guestSpeaker, images.events.guestSpeakerFallback),
     description: 'Join us for a special Sunday morning with Barron Longstreth as our guest speaker.',
   },
   {
@@ -37,7 +38,7 @@ export const upcomingEvents = [
     title: 'TBLC - A Small Group For New Believers',
     date: 'April 19, 26, May 3',
     time: 'Sunday Mornings',
-    image: 'https://static.wixstatic.com/media/78447e_7e96b4340d9f4d88aacee5df9115ca21~mv2.jpg/v1/fill/w_431,h_243,q_90,enc_avif,quality_auto/78447e_7e96b4340d9f4d88aacee5df9115ca21~mv2.jpg',
+    image: getImageUrl(images.events.smallGroup, images.events.smallGroupFallback),
     description: 'A small group session designed for new believers to grow in faith and community.',
   },
   {
@@ -45,7 +46,7 @@ export const upcomingEvents = [
     title: 'Child & Baby Dedication',
     date: 'Sunday, May 10',
     time: '10AM',
-    image: 'https://static.wixstatic.com/media/78447e_fd167b9fb7bd480089f449705bfbbdfc~mv2.jpg/v1/fill/w_411,h_232,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/78447e_fd167b9fb7bd480089f449705bfbbdfc~mv2.jpg',
+    image: getImageUrl(images.events.childDedication, images.events.childDedicationFallback),
     description: 'Dedicate your children to the Lord in a beautiful ceremony with our church family.',
   },
   {
@@ -53,7 +54,7 @@ export const upcomingEvents = [
     title: 'Easter Sunday Celebration',
     date: 'Sunday, April 21',
     time: '11AM',
-    image: 'https://static.wixstatic.com/media/78447e_397dde528b564b779ca41cd9013c67d8~mv2.jpg/v1/fill/w_788,h_426,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/78447e_397dde528b564b779ca41cd9013c67d8~mv2.jpg',
+    image: getImageUrl(images.events.easter, images.events.easterFallback),
     description: 'Celebrate the resurrection of Jesus with our church family in a powerful Easter service.',
   },
 ];
@@ -62,49 +63,49 @@ export const ministries = [
   {
     id: 'kids',
     title: 'Kids',
-    image: 'https://static.wixstatic.com/media/c1a9a3_dd54c8d3bffc4274be4fc48c0b4ee16e~mv2.png/v1/fill/w_304,h_112,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/2019-BLC-Kids.png',
+    image: getImageUrl(images.ministries.kids, images.ministries.kidsFallback),
     description: 'Sunday School begins each week at 10:00. Our check-in station on the main level opens at 9:30, and here you can check your child into the appropriate class. Your kids will love this time each week in their themed class, where they will learn about the Bible in an age-appropriate and fun way! Kids Club is held on Wednesday evenings during Bible Study from 7:00 - 8:30. This large group session for elementary-age children involves skits, Bible lessons, games, and more! Our Nursery is available during all midweek and weekend services.',
   },
   {
     id: 'couples',
     title: 'Couples',
-    image: 'https://static.wixstatic.com/media/c1a9a3_16a394f01ab94457a1e2c1ff4b6baae8~mv2_d_3456_5184_s_4_2.jpg/v1/crop/x_37,y_213,w_3410,h_3407/fill/w_330,h_328,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Holding%20Hands.jpg',
+    image: getImageUrl(images.ministries.couples, images.ministries.couplesFallback),
     description: 'Our Couples Ministry is so designated to provide the most specific ministry attention possible to people in this stage of life. The Couples Ministry includes those couples from "nearly-weds" and newlyweds to married adults. Special programs and activities include Home Improvement seminars, banquets (Valentine and others), quarterly activities and fellowships, and various other marriage conferences and seminars. Blended families will feel at home and welcome at The Better Life Church.',
   },
   {
     id: 'teens',
     title: 'Teens',
-    image: 'https://static.wixstatic.com/media/78447e_2a0d0f5d8a9b427a8255f75564666f4c~mv2.jpg/v1/fill/w_330,h_330,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/311817732_466358452191940_7412875038704992251_n.jpg',
+    image: getImageUrl(images.ministries.teens, images.ministries.teensFallback),
     description: 'The Better Life Church Youth is a vibrant and growing department that provides powerful and Christ-centered ministry to youth from ages twelve and up. This ministry offers exciting activities, live music, missions opportunities, and special events throughout the year. The Better Life Church Youth service is held each Wednesday at 7:00pm.',
   },
   {
     id: 'seniors',
     title: 'Seniors',
-    image: 'https://static.wixstatic.com/media/78447e_6a21298d435d4de8b6905939e44f0ceb~mv2.jpg/v1/crop/x_0,y_0,w_3453,h_3456/fill/w_330,h_330,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_0984%20(1)_JPG.jpg',
+    image: getImageUrl(images.ministries.seniors, images.ministries.seniorsFallback),
     description: 'At The Better Life Church, we are blessed with the wisdom and experience of many veteran saints. Our Seniors play a vital role in the ministry of this church; rather than just being retired, they get "re-fired" up for Jesus! This dynamic ministry, called the "KeenAgers" includes all those who are 50 years of age or older. Activities include bus tours, bowling, boat rides, and pot-luck suppers.',
   },
   {
     id: 'ladies',
     title: 'Ladies',
-    image: 'https://static.wixstatic.com/media/nsplsh_8cc83991a1144000a7fd0d852bc21f5a~mv2.jpg/v1/crop/x_1632,y_0,w_4019,h_4016/fill/w_330,h_330,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Image%20by%20Ben%20White.jpg',
+    image: getImageUrl(images.ministries.ladies, images.ministries.ladiesFallback),
     description: 'We host regular ladies events throughout the year! From tea parties and retreats to conferences and fellowship evenings, our Ladies Ministry offers a warm community for women to connect, grow, and be encouraged in their walk with Christ.',
   },
   {
     id: 'missions',
     title: 'Missions & Multi-Cultural',
-    image: 'https://static.wixstatic.com/media/78447e_cf79aa78e9394d789cc69765f6e6ca6d~mv2.jpg/v1/crop/x_381,y_0,w_918,h_919/fill/w_330,h_330,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/BLC-October%2006%2C%202019-3068.jpg',
+    image: getImageUrl(images.ministries.missions, images.ministries.missionsFallback),
     description: 'We love that we are a multi-cultural church and welcome every nation and culture to worship with us! We hold weekly English language and IELTS prep classes to help those new to arriving in our community. Our congregation is among the top churches in Canada for missions giving, supporting over 110 foreign missionary endeavors as well as home missionaries in Canada.',
   },
   {
     id: 'worship',
     title: 'Worship & Music',
-    image: 'https://static.wixstatic.com/media/78447e_fe3381738e594fc39b6ef45bebaaacf6~mv2.jpg/v1/fill/w_324,h_328,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/_C5A5991.jpg',
+    image: getImageUrl(images.ministries.worship, images.ministries.worshipFallback),
     description: 'The Music Ministry of The Better Life Church encompasses all ages through annual events, including a Christmas musical and an Easter concert. They also enjoy being involved in community events, such as the Remembrance Day Services, Christmas Tree lighting and more. The mission of the music department is to escort God\'s presence into our services through worship by His people.',
   },
   {
     id: 'care',
     title: 'Compassionate Care',
-    image: 'https://static.wixstatic.com/media/c1a9a3_76e387df582b441a98830e1042b2a8c7~mv2_d_2560_1440_s_2.jpg/v1/crop/x_143,y_0,w_1435,h_1436/fill/w_330,h_330,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Compassionate%20Care.jpg',
+    image: '/resources/img/ministries/care.jpg',
     description: 'Our Care Ministries here at The Better Life Church view the challenging circumstances of life as opportunities to step out and share the love and truth of Jesus Christ in our community. From baskets and flowers to those in the hospital to our Christmas food distribution programs, our Compassion Ministries have always had a heart for the needy.',
   },
 ];
