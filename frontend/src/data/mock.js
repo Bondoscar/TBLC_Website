@@ -4,7 +4,7 @@ import { images, getImageUrl } from './images';
 export const navLinks = [
   { name: 'HOME', path: '/' },
   { name: 'ABOUT', path: '/about' },
-  { name: 'MINISTRIES', path: '/ministries' },
+  // { name: 'MINISTRIES', path: '/ministries' },
   { name: 'MEDIA', path: '/media' },
   { name: 'EVENTS', path: '/events' },
   { name: 'GIVE', path: '/give' },
