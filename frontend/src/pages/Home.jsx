@@ -13,7 +13,7 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-blue-950/50 via-blue-950/30 to-blue-950/70" />
           <div className="relative z-10 flex items-center justify-center h-full px-6">
             <div className="text-center fade-up">
-              <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl">Our church is your church.</h1>
+              <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl">In HIS presence, there's fullness of Joy.</h1>
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/about" className="btn-outline">About Us <ArrowRight size={14} /></Link>
                 <Link to="/myblc" className="btn-solid">Join TBLC <ArrowRight size={14} /></Link>
