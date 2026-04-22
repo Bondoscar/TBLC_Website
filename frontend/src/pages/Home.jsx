@@ -58,7 +58,7 @@ const Home = () => {
                   <div className="flex items-center gap-2"><Calendar size={16} /> Friday Prayer <span className="text-white">7PM</span></div>
                 </div>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Link to="/events" className="btn-outline">Church Calendar</Link>
+                  <Link to="/events" className="btn-outline">Upcoming Events</Link>
                   <a href={socialLinks.map} target="_blank" rel="noreferrer" className="btn-outline"><MapPin size={14} /> Directions</a>
                 </div>
               </div>

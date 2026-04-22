@@ -41,22 +41,22 @@ export const upcomingEvents = [
     image: getImageUrl(images.events.smallGroup, images.events.smallGroupFallback),
     description: 'A small group session designed for new believers to grow in faith and community.',
   },
-  {
-    id: 3,
-    title: 'Child & Baby Dedication',
-    date: 'Sunday, May 10',
-    time: '10AM',
-    image: getImageUrl(images.events.childDedication, images.events.childDedicationFallback),
-    description: 'Dedicate your children to the Lord in a beautiful ceremony with our church family.',
-  },
-  {
-    id: 4,
-    title: 'Easter Sunday Celebration',
-    date: 'Sunday, April 21',
-    time: '11AM',
-    image: getImageUrl(images.events.easter, images.events.easterFallback),
-    description: 'Celebrate the resurrection of Jesus with our church family in a powerful Easter service.',
-  },
+  // {
+  //   id: 3,
+  //   title: 'Child & Baby Dedication',
+  //   date: 'Sunday, May 10',
+  //   time: '10AM',
+  //   image: getImageUrl(images.events.childDedication, images.events.childDedicationFallback),
+  //   description: 'Dedicate your children to the Lord in a beautiful ceremony with our church family.',
+  // },
+  // {
+  //   id: 4,
+  //   title: 'Easter Sunday Celebration',
+  //   date: 'Sunday, April 21',
+  //   time: '11AM',
+  //   image: getImageUrl(images.events.easter, images.events.easterFallback),
+  //   description: 'Celebrate the resurrection of Jesus with our church family in a powerful Easter service.',
+  // },
 ];
 
 export const ministries = [
@@ -163,7 +163,7 @@ export const newsletters = [
 export const churchInfo = {
   address: '527 Queen St, Fredericton, NB E3B 1B8',
   phone: '(506) 304-1107',
-  email: 'info@thebetterlifechurch.com',
+  email: 'Info@thebetterlifechurch.ca',
   sundayService: '10:00 AM',
   bibleStudy: 'Wednesday 7:00 PM',
   prayer: 'Friday 7:00 PM',
