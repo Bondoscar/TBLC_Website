@@ -30,10 +30,14 @@ next-env.d.ts
 dist/
 dist
 
-# Environment files (comprehensive coverage)
-
+# Misc sensitive artifacts (full .env files are intentionally NOT ignored —
+# Emergent deploy requires them in the repo and injects the correct values.)
 *token.json*
 *credentials.json*
+credentials.json
+.credentials
+*.pem
+*.key
 
 # Logs and debug files
 npm-debug.log*
@@ -44,7 +48,6 @@ dump.rdb
 
 # System files
 .DS_Store
-*.pem
 
 # Python
 __pycache__/
@@ -56,7 +59,6 @@ venv/
 chainlit.md
 .chainlit
 .ipynb_checkpoints/
-.ac
 
 # Deployment
 .vercel
@@ -76,51 +78,5 @@ agenthub/agents/youtube/db
 # Build caches
 .cache/
 
+# Local-only secrets (NOT committed to repo)
 memory/test_credentials.md
-
-# Mobile development
-android-sdk/-e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
