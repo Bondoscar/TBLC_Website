@@ -30,6 +30,7 @@ function App() {
                   <Header />
                   <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/home" element={<Navigate to="/" replace />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/ministries" element={<Ministries />} />
                     <Route path="/media" element={<Media />} />
@@ -38,6 +39,7 @@ function App() {
                     <Route path="/resources" element={<Resources />} />
                     <Route path="/myblc" element={<MyBLC />} />
                     <Route path="/myccc" element={<Navigate to="/myblc" replace />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                   <Footer />
                 </>
