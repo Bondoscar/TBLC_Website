@@ -20,7 +20,8 @@ instance.interceptors.request.use((config) => {
 });
 
 // Public
-export const fetchBootstrap = () => instance.get('/bootstrap').then((r) => r.data);
+export const fetchBootstrap = () =>
+  instance.get(`/bootstrap?t=${Date.now()}`).then((r) => r.data);
 export const fetchEvents = (published = true) =>
   instance.get(`/events?published=${published}`).then((r) => r.data);
 export const fetchMinistries = (published = true) =>

@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Response, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from pydantic import BaseModel
 
@@ -318,7 +318,7 @@ def build_api_router(db: AsyncIOMotorDatabase) -> APIRouter:
     # Aggregate bootstrap endpoint (useful for the public frontend)
     # -----------------------------------------------------------------------
     @router.get("/bootstrap")
-    async def bootstrap():
+    async def bootstrap(response: Response):
         """Single call that returns everything the public site needs."""
         events = await _list("events", published_only=True)
         ministries = await _list("ministries", published_only=True)
@@ -327,6 +327,10 @@ def build_api_router(db: AsyncIOMotorDatabase) -> APIRouter:
         newsletters = await _list("newsletters", published_only=True)
         settings_docs = await db.site_settings.find({}, {"_id": 0}).to_list(100)
         settings = {d["key"]: d.get("value", {}) for d in settings_docs}
+        # Prevent edge/browser caches from serving a stale snapshot after an
+        # admin edit – content changes must be reflected on the next reload.
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
         return {
             "events": events,
             "ministries": ministries,
