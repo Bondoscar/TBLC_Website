@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
-import { bannerImage } from '../data/mock';
+import { useSiteData } from '../context/SiteDataContext';
 import { useToast } from '../hooks/use-toast';
 
 const MyBLC = () => {
+  const { settings } = useSiteData();
+  const imgs = settings.site_images || {};
+  const bannerImage = imgs.banner_direct || imgs.banner || '';
   const { toast } = useToast();
   const [form, setForm] = useState({ name: '', email: '', phone: '', joining: 'no', names: '' });
   const [submitted, setSubmitted] = useState(false);
@@ -89,7 +92,7 @@ const MyBLC = () => {
 
       <section className="relative w-full">
         <div className="relative h-[30vh] min-h-[220px]">
-          <img src={bannerImage} alt="myBLC" className="absolute inset-0 w-full h-full object-cover" />
+          {bannerImage && <img src={bannerImage} alt="myBLC" className="absolute inset-0 w-full h-full object-cover" />}
           <div className="absolute inset-0 bg-black/65" />
           <div className="relative h-full flex items-center justify-center text-center px-6">
             <Link to="/" className="btn-outline">Return to Website</Link>

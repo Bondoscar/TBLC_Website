@@ -1,9 +1,11 @@
 import React from 'react';
-import { ministries } from '../data/mock';
+import { useSiteData, imgFrom } from '../context/SiteDataContext';
 
 const Ministries = () => {
+  const { ministries } = useSiteData();
+
   return (
-    <div className="bg-blue-950 text-white">
+    <div className="bg-blue-950 text-white" data-testid="ministries-page">
       <section className="pt-16 pb-10 px-6 lg:px-10 text-center">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">TBLC</div>
         <h1 className="hero-title text-4xl md:text-6xl">Ministries</h1>
@@ -15,9 +17,9 @@ const Ministries = () => {
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[1200px] mx-auto space-y-16">
           {ministries.map((m, idx) => (
-            <div key={m.id} className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center ${idx % 2 === 1 ? 'md:[&>*:first-child]:order-2' : ''}`}>
-              <div className="aspect-[4/3] overflow-hidden card-hover">
-                <img src={m.image} alt={m.title} className="w-full h-full object-cover" />
+            <div key={m.id} data-testid={`ministry-${m.slug}`} className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center ${idx % 2 === 1 ? 'md:[&>*:first-child]:order-2' : ''}`}>
+              <div className="aspect-[4/3] overflow-hidden card-hover bg-blue-900">
+                {imgFrom(m) && <img src={imgFrom(m)} alt={m.title} className="w-full h-full object-cover" />}
               </div>
               <div>
                 <div className="text-xs tracking-[0.3em] text-white/60 mb-3">MINISTRY</div>

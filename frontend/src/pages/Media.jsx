@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Play, X } from 'lucide-react';
-import { sermons } from '../data/mock';
+import { useSiteData } from '../context/SiteDataContext';
 
 const Media = () => {
+  const { sermons } = useSiteData();
   const [current, setCurrent] = useState(null);
 
   return (
-    <div className="bg-blue-950 text-white">
+    <div className="bg-blue-950 text-white" data-testid="media-page">
       <section className="pt-16 pb-10 px-6 lg:px-10 text-center">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">MEDIA</div>
         <h1 className="hero-title text-4xl md:text-6xl">Archived Services</h1>
@@ -22,10 +23,11 @@ const Media = () => {
               key={s.id}
               onClick={() => setCurrent(s)}
               className="group text-left card-hover"
+              data-testid={`sermon-${s.id}`}
             >
               <div className="relative aspect-video overflow-hidden bg-neutral-900">
                 <img
-                  src={`https://i.ytimg.com/vi/${s.youtubeId}/hqdefault.jpg`}
+                  src={`https://i.ytimg.com/vi/${s.youtube_id}/hqdefault.jpg`}
                   alt={s.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -35,7 +37,7 @@ const Media = () => {
                     <Play size={22} fill="#000" />
                   </div>
                 </div>
-                <div className="absolute bottom-2 right-2 bg-blue-950/80 text-white text-xs px-2 py-1">{s.duration}</div>
+                {s.duration && <div className="absolute bottom-2 right-2 bg-blue-950/80 text-white text-xs px-2 py-1">{s.duration}</div>}
               </div>
               <div className="pt-4">
                 <h3 className="serif-display text-lg font-semibold">{s.title}</h3>
@@ -48,7 +50,7 @@ const Media = () => {
 
       {/* Video modal */}
       {current && (
-        <div className="fixed inset-0 z-[100] bg-blue-950/90 flex items-center justify-center px-4 py-6" onClick={() => setCurrent(null)}>
+        <div className="fixed inset-0 z-[100] bg-blue-950/90 flex items-center justify-center px-4 py-6" onClick={() => setCurrent(null)} data-testid="sermon-modal">
           <div className="relative w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setCurrent(null)}
@@ -58,7 +60,7 @@ const Media = () => {
             </button>
             <div className="aspect-video w-full bg-blue-950">
               <iframe
-                src={`https://www.youtube.com/embed/${current.youtubeId}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${current.youtube_id}?autoplay=1`}
                 title={current.title}
                 className="w-full h-full"
                 frameBorder="0"

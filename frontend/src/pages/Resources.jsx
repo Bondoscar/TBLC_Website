@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { FileDown, UserPlus, CheckCircle2 } from 'lucide-react';
-import { newsletters } from '../data/mock';
+import { useSiteData } from '../context/SiteDataContext';
 import { useToast } from '../hooks/use-toast';
 
 const Resources = () => {
+  const { newsletters } = useSiteData();
   const { toast } = useToast();
   const [form, setForm] = useState({ first: '', last: '', email: '' });
   const [subscribed, setSubscribed] = useState(false);
@@ -15,11 +16,11 @@ const Resources = () => {
       return;
     }
     setSubscribed(true);
-    toast({ title: 'Thanks for subscribing!', description: 'You\'ll now receive our weekly newsletter.' });
+    toast({ title: 'Thanks for subscribing!', description: "You'll now receive our weekly newsletter." });
   };
 
   return (
-    <div className="bg-blue-950 text-white">
+    <div className="bg-blue-950 text-white" data-testid="resources-page">
       <section className="pt-16 pb-10 px-6 lg:px-10 text-center">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">RESOURCES</div>
         <h1 className="hero-title text-4xl md:text-6xl">Resources</h1>
@@ -37,7 +38,7 @@ const Resources = () => {
               <p className="text-white/70 mt-2">We’ll be in touch shortly.</p>
             </div>
           ) : (
-            <form onSubmit={submit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <form onSubmit={submit} className="grid grid-cols-1 md:grid-cols-3 gap-4" data-testid="newsletter-form">
               <input className="dark-input" placeholder="First name" value={form.first} onChange={(e) => setForm({ ...form, first: e.target.value })} />
               <input className="dark-input" placeholder="Last name" value={form.last} onChange={(e) => setForm({ ...form, last: e.target.value })} />
               <input className="dark-input" type="email" placeholder="Email address" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
@@ -54,13 +55,23 @@ const Resources = () => {
         <div className="max-w-[1100px] mx-auto">
           <h2 className="section-title text-center mb-10">Monthly Newsletters</h2>
           <p className="text-center text-white/70 mb-10">View our recent monthly newsletters in PDF.</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {newsletters.map((n, i) => (
-              <a key={i} href={n.url} className="border-2 border-white/20 px-5 py-4 flex items-center justify-between hover:bg-white hover:text-blue-950 transition-colors group">
-                <span className="text-sm tracking-[0.15em]">{n.month}</span>
-                <FileDown size={16} className="opacity-70 group-hover:opacity-100" />
-              </a>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" data-testid="newsletter-list">
+            {newsletters.map((n) => {
+              const href = n.file_direct_url || n.file_url || '#';
+              return (
+                <a
+                  key={n.id}
+                  href={href}
+                  target={href === '#' ? undefined : '_blank'}
+                  rel="noreferrer"
+                  className="border-2 border-white/20 px-5 py-4 flex items-center justify-between hover:bg-white hover:text-blue-950 transition-colors group"
+                  data-testid={`newsletter-${n.id}`}
+                >
+                  <span className="text-sm tracking-[0.15em]">{n.month}</span>
+                  <FileDown size={16} className="opacity-70 group-hover:opacity-100" />
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>

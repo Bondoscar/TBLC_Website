@@ -1,12 +1,16 @@
 import React from 'react';
 import { CreditCard, Mail, Heart } from 'lucide-react';
-import { bannerImage } from '../data/mock';
+import { useSiteData } from '../context/SiteDataContext';
 
 const Give = () => {
+  const { settings } = useSiteData();
+  const imgs = settings.site_images || {};
+  const bannerImage = imgs.banner_direct || imgs.banner || '';
+
   return (
-    <div className="bg-blue-950 text-white">
+    <div className="bg-blue-950 text-white" data-testid="donate-page">
       <section className="relative h-[40vh] min-h-[280px] w-full overflow-hidden">
-        <img src={bannerImage} alt="Give" className="absolute inset-0 w-full h-full object-cover" />
+        {bannerImage && <img src={bannerImage} alt="Give" className="absolute inset-0 w-full h-full object-cover" />}
         <div className="absolute inset-0 bg-blue-950/65" />
         <div className="relative h-full flex items-center justify-center text-center px-6">
           <div>

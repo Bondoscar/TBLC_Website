@@ -1,0 +1,45 @@
+{
+  "summary": "Full backend + frontend testing for TBLC site. Fixed a real bug (locally-scoped Pydantic SettingBody in routes.py not recognized by FastAPI — settings PUT was returning 422). After fix, 24/24 pytest tests pass. Frontend: all 6 public pages render with correct seeded data (2 events, 8 ministries, 9 sermons, 3 pastors, 16 newsletters), admin login/dashboard/CRUD/sign-out all work, Drive URL auto-conversion works end-to-end (event created with Drive URL via admin shows image on public Events page).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Admin Site Settings → Footer reflects changes",
+        "issue": "After saving church_info phone via admin, a freshly-opened public page tab did not show the new phone number within ~2.5s. Backend persistence is confirmed (pytest asserts GET returns new value). Suspected cause: ingress/browser caching of /api/bootstrap GET. Recommend adding Cache-Control: no-store to the /bootstrap response, OR cache-busting query param in SiteDataContext.reload.",
+        "affected_selectors": ["footer"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_tblc_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Consider adding Cache-Control: no-store headers to /api/bootstrap (or a cache-buster param) so edits made in admin show up immediately on fresh public page loads without needing a hard refresh.",
+    "Optional: protect /admin/seed with idempotency lock (already uses seed_if_empty, fine as is).",
+    "Optional: tighten CORS_ORIGINS in production from '*' to the actual site origin."
+  ],
+  "critical_code_review_comments": [
+    "BUG FIXED: routes.py defined `class SettingBody(BaseModel)` inside the router factory function. FastAPI could not infer this as a JSON body and rejected all PUT /api/settings/{key} requests with 422. Moved to module scope — settings CRUD now works.",
+    "routes.py is ~340 lines with heavy duplication across Events/Ministries/Sermons/Pastors/Newsletters CRUD — could be collapsed into a generic factory (already partly done via _list/_get/_delete). DRY opportunity.",
+    "auth.py: `ADMIN_JWT_SECRET` is auto-generated if missing, invalidating all admin sessions on every restart. That is acceptable but should be documented or persisted to .env to avoid surprise logouts.",
+    "seed_if_empty(db) keeps site_settings idempotent but does NOT recompute hero_direct/worship_direct/banner_direct if a user ever blanks them; PUT handler does, so only startup path is affected — minor.",
+    "drive_utils regexes are shared between backend and frontend (ImagePreview.jsx). Acceptable since both were manually kept in sync; note in a comment so future changes stay aligned."
+  ],
+  "updated_files": [
+    "/app/backend/routes.py (moved SettingBody to module scope, added Body import)",
+    "/app/backend/tests/test_tblc_api.py (new — 24 pytest tests)"
+  ],
+  "success_rate": {"backend": "100% (24/24)", "frontend": "95% (all flows work except caching-related footer refresh)"},
+  "test_credentials": "Admin password: DsSI5MItZj4O9D-vKUxk2w (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None — used seeded data. All TEST_-prefixed records created during tests were cleaned up.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend fully green. Admin end-to-end works (login, tab switching, event create with Drive URL, public visibility, delete, settings save, sign out). Only nit: public site reflects church_info changes on a FRESH browser load only once /api/bootstrap is re-fetched (no HTTP caching headers set). If you want to validate the footer-refresh behavior, either add Cache-Control: no-store to bootstrap or wait longer / hard-reload the public tab.",
+  "rca of the issue": "SettingBody PUT 422: FastAPI dependency-injection uses type introspection. A Pydantic BaseModel defined INSIDE a function body sometimes confuses FastAPI's body-vs-query detection (the 422 returned loc=['query','body'] — i.e. it tried to bind the body as a query parameter named `body`). Moving the model to module scope restored proper JSON-body binding. Repro: before fix, `curl -X PUT /api/settings/site_images -d '{\"value\": {...}}'` returns 422 with detail 'Field required'. After fix, returns 200 with computed *_direct fields."
+}
