@@ -1,7 +1,7 @@
 // Centralized API client for TBLC
 import axios from 'axios';
 
-const BACKEND = process.env.REACT_APP_BACKEND_URL;
+const BACKEND = (process.env.REACT_APP_BACKEND_URL || '').replace(/\/+$/, '').replace(/\/api$/, '');
 export const API_BASE = `${BACKEND}/api`;
 
 // Token lives in localStorage so admin session persists across reloads
