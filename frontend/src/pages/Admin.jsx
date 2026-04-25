@@ -281,7 +281,7 @@ const SettingsPanel = ({ onAfterChange }) => {
       <section className="border border-white/15 p-5">
         <h3 className="serif-display text-xl font-semibold mb-4">Church Info</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {['address', 'phone', 'email', 'sunday_service', 'bible_study', 'prayer'].map((k) => (
+          {['address', 'phone', 'email', 'sunday_service', 'bible_study', 'Special_Program'].map((k) => (
             <Field key={k} label={k.replace(/_/g, ' ').toUpperCase()}>
               <input
                 className={inputCls}

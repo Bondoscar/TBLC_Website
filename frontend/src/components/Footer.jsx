@@ -38,7 +38,7 @@ const Footer = () => {
           <div className="mt-5 text-white/70 text-sm space-y-1">
             {info.sunday_service && <div>Sunday Service: <span className="text-white">{info.sunday_service}</span></div>}
             {info.bible_study && <div>Bible Study: <span className="text-white">{info.bible_study}</span></div>}
-            {info.prayer && <div>Prayer: <span className="text-white">{info.prayer}</span></div>}
+            {info.prayer && <div>Special Program: <span className="text-white">{info.prayer}</span></div>}
           </div>
         </div>
 
