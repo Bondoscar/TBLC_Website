@@ -33,16 +33,16 @@ const About = () => {
       {/* Mission + Vision */}
       <section className="px-6 lg:px-10 pb-20">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-10 card-hover border-2 border-white/20">
-            <div className="text-xs tracking-[0.3em] text-white/60 mb-3">OUR MISSION</div>
-            <h3 className="serif-display text-2xl font-semibold mb-4">To know Christ and make Him known</h3>
-            <p className="text-white/75 leading-relaxed">{about.mission}</p>
-          </div>
-          <div className="p-10 card-hover border-2 border-white/20">
+         <div className="p-10 card-hover border-2 border-white/20">
             <div className="text-xs tracking-[0.3em] text-white/60 mb-3">OUR VISION</div>
             <h3 className="serif-display text-2xl font-semibold mb-4">A family of believers</h3>
             <p className="text-white/75 leading-relaxed">{about.vision}</p>
           </div>
+          <div className="p-10 card-hover border-2 border-white/20">
+            <div className="text-xs tracking-[0.3em] text-white/60 mb-3">OUR MISSION</div>
+            <h3 className="serif-display text-2xl font-semibold mb-4">To know Christ and make Him known</h3>
+            <p className="text-white/75 leading-relaxed">{about.mission}</p>
+          </div>          
         </div>
       </section>
 
