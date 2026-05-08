@@ -24,7 +24,7 @@ const Footer = () => {
             </div>
           </div>
           <p className="text-white/70 text-sm leading-relaxed">
-            A progressive, visionary congregation with a passion for real spirituality, a love for family, a heart for community, and a zest for life.
+            The Better Life Church is a God-commissioned, life-transforming Evangelical, Liberation, and Prophetic Ministry founded on the principles of the Holy Bible, with the mandate to touch, save, revive, bless, wholly transform, and empower lives, families, and society at large.
           </p>
         </div>
 
