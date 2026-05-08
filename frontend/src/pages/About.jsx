@@ -40,7 +40,7 @@ const About = () => {
           </div>
           <div className="p-10 card-hover border-2 border-white/20">
             <div className="text-xs tracking-[0.3em] text-white/60 mb-3">OUR MISSION</div>
-            <h3 className="serif-display text-2xl font-semibold mb-4">To know Christ and make Him known In our community and accros the nations</h3>
+            <h3 className="serif-display text-2xl font-semibold mb-4">To know Christ and make him known In our community and accros the nations</h3>
             <p className="text-white/75 leading-relaxed">{about.mission}</p>
           </div>          
         </div>
