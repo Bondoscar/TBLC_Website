@@ -64,7 +64,7 @@ const Home = () => {
                 <div className="mt-6 space-y-2 text-white/85">
                   {info.sunday_service && <div className="flex items-center gap-2"><Calendar size={16} /> Sunday Worship Service <span className="text-white">{info.sunday_service}</span></div>}
                   {info.bible_study && <div className="flex items-center gap-2"><Calendar size={16} /> {info.bible_study}</div>}
-                  {info.prayer && <div className="flex items-center gap-2"><Calendar size={16} /> {info.prayer}</div>}
+                  {/* {info.prayer && <div className="flex items-center gap-2"><Calendar size={16} /> {info.prayer}</div>} */}
                 </div>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link to="/events" className="btn-outline">Upcoming Events</Link>
