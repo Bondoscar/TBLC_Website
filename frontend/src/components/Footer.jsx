@@ -18,10 +18,10 @@ const Footer = () => {
               alt="The Better Life Church"
               className="h-14 w-auto bg-white rounded-sm p-1"
             />
-            <div className="flex flex-col leading-tight">
+            {/* <div className="flex flex-col leading-tight">
               <span className="serif-display text-lg font-semibold text-white tracking-wide">THE BETTER LIFE</span>
               <span className="serif-display text-lg font-semibold text-white tracking-wide">CHURCH</span>
-            </div>
+            </div> */}
           </div>
           <p className="text-white/70 text-sm leading-relaxed">
             The Better Life Church is a God-commissioned, life-transforming Evangelical, Liberation, and Prophetic Ministry founded on the principles of the Holy Bible, with the mandate to touch, save, revive, bless, wholly transform, and empower lives, families, and society at large.
