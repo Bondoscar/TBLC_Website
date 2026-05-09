@@ -39,8 +39,12 @@ const MyBLC = () => {
         </div>
       </section>
 
-      {/* <section className="pb-20 px-6 lg:px-10">
-        <div className="max-w-[760px] mx-auto p-8 md:p-10 border-2 border-white/20">
+      <section className="pb-20 px-6 lg:px-10">
+      <div className="mt-8 flex flex-wrap gap-3">
+                        <Link to="/events" className="btn-outline">Upcoming Events</Link>
+                        {social.map && <a href={social.map} target="_blank" rel="noreferrer" className="btn-outline"><MapPin size={14} /> Directions</a>}
+                      </div>
+        {/* <div className="max-w-[760px] mx-auto p-8 md:p-10 border-2 border-white/20">
           <h2 className="section-title text-center mb-8">Register for TBLC</h2>
           {submitted ? (
             <div className="text-center">
@@ -87,8 +91,8 @@ const MyBLC = () => {
               </div>
             </form>
           )}
-        </div>
-      </section> */}
+        </div>*/}
+      </section> 
 
       <section className="relative w-full">
         <div className="relative h-[30vh] min-h-[220px]">
