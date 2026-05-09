@@ -16,7 +16,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0" data-testid="header-home-link">
             <img
-              src="https://customer-assets.emergentagent.com/job_community-site-clone/artifacts/0yn2y1tq_image.png"
+              src="../frontend/public/resources/logo.png"
               alt="The Better Life Church"
               className="h-14 md:h-16 w-auto bg-white rounded-sm p-1"
             />
