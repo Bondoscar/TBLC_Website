@@ -32,14 +32,14 @@ const MyBLC = () => {
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[900px] mx-auto text-white/85 leading-relaxed">
           <p className="mb-5">
-            Thank you for your interest in <span className="text-white">myBLC</span>! In our myBLC session we will talk about our church’s story thus far, how to grow in your personal relationship with Jesus, how to experience salvation and how you can get involved at The Better Life Church. Our desire is for Our Church to be Your Church.
+            Thank you for your interest in <span className="text-white">TBLC</span>! In our TBLC session we will talk about our church’s story thus far, how to grow in your personal relationship with Jesus, how to experience salvation and how you can get involved at The Better Life Church. Our desire is for Our Church to be Your Church.
           </p>
           <p className="mb-5">We believe that the time we spend together over these three weeks will help connect you to the vision of our church and the purpose God has for your life!</p>
           <p className="text-white">Our upcoming TBLC classes will be on <span className="font-semibold">April 19, April 26, May 3 at 10am</span>.</p>
         </div>
       </section>
 
-      <section className="pb-20 px-6 lg:px-10">
+      {/* <section className="pb-20 px-6 lg:px-10">
         <div className="max-w-[760px] mx-auto p-8 md:p-10 border-2 border-white/20">
           <h2 className="section-title text-center mb-8">Register for TBLC</h2>
           {submitted ? (
@@ -88,7 +88,7 @@ const MyBLC = () => {
             </form>
           )}
         </div>
-      </section>
+      </section> */}
 
       <section className="relative w-full">
         <div className="relative h-[30vh] min-h-[220px]">
