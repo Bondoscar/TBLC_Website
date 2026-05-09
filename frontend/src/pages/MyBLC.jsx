@@ -32,25 +32,16 @@ const MyBLC = () => {
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[900px] mx-auto text-white/85 leading-relaxed">
           <p className="mb-5">
-            Thank you for your interest in <span className="text-white">TBLC!</span> Our Sunday Service is a time of deep worship, heartfelt prayer, and life-transforming teaching that brings encouragement, strength, and direction for the new week.
-            <br><span className="text-white">Time: 10AM - 12NOON</span></br>
+            Thank you for your interest in <span className="text-white">TBLC</span>! Thank you for your interest in <span className="text-white">TBLC!</span> Our Sunday Service is a time of deep worship, heartfelt prayer, and life-transforming teaching that brings encouragement, strength, and direction for the new week.<span className="text-white">Time: 10AM - 12NOON</span>
           </p>
           <p className="mb-5">
-            Our Wednesday Midweek Service - At The Master’s Feet (Bible Study) is designed to deepen your spiritual growth and strengthen your walk with God through the wisdom and revelation found in His Word.
-            <br>It's an avenue to grow in grace.</br>
-            <br><span className="text-white">Time: 7PM - 8:30PM</span></br>
-          </p>
-          <p className="mb-5">
-            ASCEND PRAYER & STRATEGY CAMP holds every second Saturday of the month. This gathering is focused on marketplace excellence, addressing stubborn challenges, and fostering revival in individuals, families, and communities.
-            <br><span className="text-white">Time: 7AM - 12NOON</span></br>
-          </p>
-          <p className="mb-5">Join us at any of these meetings - your life will be richly blessed.</p>
-          <br><span className="text-white">Shalom!</span></br>          
+            Our Wednesday Midweek Service - At The Master’s Feet (Bible Study) is designed to deepen your spiritual growth and strengthen your walk with God through the wisdom and revelation found in His Word. It's an avenue to grow in grace. <span className="text-white">Time: 7PM - 8:30PM</span>
+          </p>          
         </div>
       </section>
 
       <section className="pb-20 px-6 lg:px-10">
-                      <div className="pt-2 text-center">
+            <div className="pt-2 text-center">
                         <Link to="/events" className="btn-outline">Upcoming Events</Link>                        
                       </div>
         {/* <div className="max-w-[760px] mx-auto p-8 md:p-10 border-2 border-white/20">
