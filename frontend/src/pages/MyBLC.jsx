@@ -34,15 +34,13 @@ const MyBLC = () => {
           <p className="mb-5">
             Thank you for your interest in <span className="text-white">TBLC</span>! In our TBLC session we will talk about our church’s story thus far, how to grow in your personal relationship with Jesus, how to experience salvation and how you can get involved at The Better Life Church. Our desire is for Our Church to be Your Church.
           </p>
-          <p className="mb-5">We believe that the time we spend together over these three weeks will help connect you to the vision of our church and the purpose God has for your life!</p>
-          <p className="text-white">Our upcoming TBLC classes will be on <span className="font-semibold">April 19, April 26, May 3 at 10am</span>.</p>
+          <p className="mb-5">We believe that the time we spend together over these three weeks will help connect you to the vision of our church and the purpose God has for your life!</p>          
         </div>
       </section>
 
       <section className="pb-20 px-6 lg:px-10">
       <div className="mt-8 flex flex-wrap gap-3">
-                        <Link to="/events" className="btn-outline">Upcoming Events</Link>
-                        {social.map && <a href={social.map} target="_blank" rel="noreferrer" className="btn-outline"><MapPin size={14} /> Directions</a>}
+                        <Link to="/events" className="btn-outline">Upcoming Events</Link>                        
                       </div>
         {/* <div className="max-w-[760px] mx-auto p-8 md:p-10 border-2 border-white/20">
           <h2 className="section-title text-center mb-8">Register for TBLC</h2>
