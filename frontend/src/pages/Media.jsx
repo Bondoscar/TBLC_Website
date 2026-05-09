@@ -10,7 +10,7 @@ const Media = () => {
     <div className="bg-blue-950 text-white" data-testid="media-page">
       <section className="pt-16 pb-10 px-6 lg:px-10 text-center">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">MEDIA</div>
-        <h1 className="hero-title text-4xl md:text-6xl">Archived Services</h1>
+        <h1 className="hero-title text-4xl md:text-6xl">Timeless Messages</h1>
         <p className="mt-5 text-white/75 max-w-[760px] mx-auto">
           We pray that, wherever you are, you will worship, praise, sing, and pray right along with us. The presence and power of God are not confined to a building or a particular time; so as you watch our archived services, let God minister to you!
         </p>
