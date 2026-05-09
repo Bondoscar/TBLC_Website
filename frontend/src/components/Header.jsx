@@ -18,7 +18,7 @@ const Header = () => {
             <img
               src="/resources/logo.png"
               alt="The Better Life Church"
-              className="h-14 md:h-16 w-auto bg-white rounded-md p-0.5 object-contain shadow-md"
+              className="h-14 md:h-16 w-auto bg-white rounded-sm p-1"
             />
             <div className="hidden sm:flex flex-col leading-tight">
               <span className="serif-display text-lg md:text-xl font-semibold text-white tracking-wide">THE BETTER LIFE</span>
