@@ -39,7 +39,7 @@ const MyBLC = () => {
       </section>
 
       <section className="pb-20 px-6 lg:px-10">
-      <div className="mt-8 flex flex-wrap gap-3">
+                      <div className="pt-2 text-center">
                         <Link to="/events" className="btn-outline">Upcoming Events</Link>                        
                       </div>
         {/* <div className="max-w-[760px] mx-auto p-8 md:p-10 border-2 border-white/20">
