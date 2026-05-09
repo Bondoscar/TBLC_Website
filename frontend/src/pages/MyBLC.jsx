@@ -34,7 +34,8 @@ const MyBLC = () => {
           <p className="mb-5">
             Thank you for your interest in <span className="text-white">TBLC</span>! In our TBLC session we will talk about our church’s story thus far, how to grow in your personal relationship with Jesus, how to experience salvation and how you can get involved at The Better Life Church. Our desire is for Our Church to be Your Church.
           </p>
-          <p className="mb-5">We believe that the time we spend together over these three weeks will help connect you to the vision of our church and the purpose God has for your life!</p>          
+          <p className="mb-5">We believe that the time we spend together over these three weeks will help connect you to the vision of our church and the purpose God has for your life!</p>      
+          <p className="mb-5">We believe that the time we spend together over these three weeks !</p>    
         </div>
       </section>
 
