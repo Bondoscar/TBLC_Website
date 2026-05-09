@@ -14,7 +14,7 @@ const Footer = () => {
         <div>
           <div className="flex items-center gap-3 mb-4">
             <img
-              src="https://customer-assets.emergentagent.com/job_community-site-clone/artifacts/0yn2y1tq_image.png"
+              src="https://drive.google.com/file/d/1VhNAuU5YxFE6CQvwfIYtEdz0JLbD1v-G/view?usp=sharing"
               alt="The Better Life Church"
               className="h-14 w-auto bg-white rounded-sm p-1"
             />
