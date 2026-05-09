@@ -32,11 +32,12 @@ const MyBLC = () => {
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[900px] mx-auto text-white/85 leading-relaxed">
           <p className="mb-5">
-            Thank you for your interest in <span className="text-white">TBLC</span>! Our Sunday Service is a time of deep worship, heartfelt prayer, and life-transforming teaching that brings encouragement, strength, and direction for the new week. <span className="text-white">Time: 10AM - 12NOON</span>
+            Thank you for your interest in <span className="text-white">TBLC</span>! Our Sunday Service is a time of deep worship, heartfelt prayer, and life-transforming teaching that brings encouragement, strength, and direction for the new week.             <span className="text-white">Time: 10AM - 12NOON</span>
           </p>
           <p className="mb-5">Our Wednesday Midweek Service - At The Master’s Feet (Bible Study) is designed to deepen your spiritual growth and strengthen your walk with God through the wisdom and revelation found in His Word. It's an avenue to grow in grace. <span className="text-white">Time: 7PM - 8:30PM</span>
           </p>      
-          <p className="mb-5">We believe that the time we spend together over these three weeks !</p>    
+          <p className="mb-5">ASCEND PRAYER & STRATEGY CAMP holds every second Saturday of the month. This gathering is focused on marketplace excellence, addressing stubborn challenges, and fostering revival in individuals, families, and communities.          <span className="text-white">Time: 7AM - 12NOON</span>
+          </p> 
         </div>
       </section>
 

@@ -78,7 +78,7 @@ const Home = () => {
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <a href="https://www.youtube.com/@tblccanada/streams" target="_blank" rel="noreferrer" className="btn-solid"><Play size={14} /> Live Services</a>
-                  <Link to="/media" className="btn-outline">Archived Services</Link>
+                  <Link to="/media" className="btn-outline">Timeless Messages</Link>
                 </div>
               </div>
             </div>
