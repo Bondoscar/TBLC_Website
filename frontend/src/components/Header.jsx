@@ -16,7 +16,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0" data-testid="header-home-link">
             <img
-              src="https://drive.google.com/file/d/1RpF5gv-kfA2cBU7cUEIh9p2bx4NJOtr-/view?usp=drive_link"
+              src="https://drive.google.com/file/d/1VhNAuU5YxFE6CQvwfIYtEdz0JLbD1v-G/view"
               alt="The Better Life Church"
               className="h-14 md:h-16 w-auto bg-white rounded-sm p-1"
             />
