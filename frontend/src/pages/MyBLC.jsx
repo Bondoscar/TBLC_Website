@@ -32,9 +32,20 @@ const MyBLC = () => {
       <section className="py-16 px-6 lg:px-10">
         <div className="max-w-[900px] mx-auto text-white/85 leading-relaxed">
           <p className="mb-5">
-            Thank you for your interest in <span className="text-white">TBLC</span>! In our TBLC session we will talk about our church’s story thus far, how to grow in your personal relationship with Jesus, how to experience salvation and how you can get involved at The Better Life Church. Our desire is for Our Church to be Your Church.
+            Our Sunday Service is a time of deep worship, heartfelt prayer, and life-transforming teaching that brings encouragement, strength, and direction for the new week.
+            <br><span className="text-white">Time: 10AM - 12NOON</span></br>
           </p>
-          <p className="mb-5">We believe that the time we spend together over these three weeks will help connect you to the vision of our church and the purpose God has for your life!</p>          
+          <p className="mb-5">
+            Our Wednesday Midweek Service - At The Master’s Feet (Bible Study) is designed to deepen your spiritual growth and strengthen your walk with God through the wisdom and revelation found in His Word.
+            <br>It's an avenue to grow in grace.</br>
+            <br><span className="text-white">Time: 7PM - 8:30PM</span></br>
+          </p>
+          <p className="mb-5">
+            ASCEND PRAYER & STRATEGY CAMP holds every second Saturday of the month. This gathering is focused on marketplace excellence, addressing stubborn challenges, and fostering revival in individuals, families, and communities.
+            <br><span className="text-white">Time: 7AM - 12NOON</span></br>
+          </p>
+          <p className="mb-5">Join us at any of these meetings - your life will be richly blessed.</p>
+          <br><span className="text-white">Shalom!</span></br>          
         </div>
       </section>
 
