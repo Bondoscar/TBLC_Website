@@ -25,7 +25,7 @@ const MyBLC = () => {
   return (
     <div className="bg-blue-950 text-white">
       <section className="pt-16 pb-10 px-6 lg:px-10 text-center">
-        <div className="text-xs tracking-[0.3em] text-white/60 mb-3">NEW BELIEVERS CLASS</div>
+        <div className="text-xs tracking-[0.3em] text-white/60 mb-3">NEW TO OUR CHURCH</div>
         <h1 className="hero-title text-4xl md:text-6xl">TBLC</h1>
       </section>
 
