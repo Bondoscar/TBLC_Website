@@ -34,7 +34,8 @@ const MyBLC = () => {
           <p className="mb-5">
             Thank you for your interest in <span className="text-white">TBLC</span>! Our Sunday Service is a time of deep worship, heartfelt prayer, and life-transforming teaching that brings encouragement, strength, and direction for the new week. <span className="text-white">Time: 10AM - 12NOON</span>
           </p>
-          <p className="mb-5">We believe that the time we spend together over these three weeks will help connect you to the vision of our church and the purpose God has for your life!</p>      
+          <p className="mb-5">Our Wednesday Midweek Service - At The Master’s Feet (Bible Study) is designed to deepen your spiritual growth and strengthen your walk with God through the wisdom and revelation found in His Word. It's an avenue to grow in grace. <span className="text-white">Time: 7PM - 8:30PM</span>
+          </p>      
           <p className="mb-5">We believe that the time we spend together over these three weeks !</p>    
         </div>
       </section>

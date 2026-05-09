@@ -12,7 +12,7 @@ const Media = () => {
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">MEDIA</div>
         <h1 className="hero-title text-4xl md:text-6xl">Timeless Messages</h1>
         <p className="mt-5 text-white/75 max-w-[760px] mx-auto">
-          We pray that, wherever you are, you will worship, praise, sing, and pray right along with us. The presence and power of God are not confined to a building or a particular time; so as you watch our services, let God minister to you!
+          No matter where you are, we invite you to worship, praise, sing, and pray along with us. God’s presence and power are not limited to a building or a moment in time. As you watch our services, may the Lord speak to your heart, strengthen your faith, and minister to you richly.
         </p>
       </section>
 
