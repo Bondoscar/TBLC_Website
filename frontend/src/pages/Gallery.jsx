@@ -62,17 +62,27 @@ const Gallery = () => {
       if (event.key === 'Escape') setSelectedImage(null);
       if (event.key === 'ArrowRight') {
         const nextIndex = (selectedImage.index + 1) % galleryData.images.length;
-        setSelectedImage({ ...galleryData.images[nextIndex], index: nextIndex });
+        setSelectedImage({ src: galleryData.images[nextIndex], index: nextIndex });
       }
       if (event.key === 'ArrowLeft') {
         const prevIndex = (selectedImage.index - 1 + galleryData.images.length) % galleryData.images.length;
-        setSelectedImage({ ...galleryData.images[prevIndex], index: prevIndex });
+        setSelectedImage({ src: galleryData.images[prevIndex], index: prevIndex });
       }
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [galleryData.images, selectedImage]);
+
+  useEffect(() => {
+    if (selectedImage) {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+    return undefined;
+  }, [selectedImage]);
 
   return (
     <div className="bg-blue-950 text-white" data-testid="gallery-page">
