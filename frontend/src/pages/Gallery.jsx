@@ -20,32 +20,30 @@ const resolveDriveImageUrl = (value = '') => {
   return raw;
 };
 
-const parseGallerySources = (value = '') => {
+// Always resolves to a flat list of directly-renderable image URLs.
+// Accepts one or more image URLs / Drive file links, separated by
+// newlines, commas, or semicolons. A bare Drive *folder* link/ID can't be
+// expanded into individual images client-side, so it's skipped rather than
+// embedded — admins should list individual image links instead.
+const parseGalleryImages = (value = '') => {
   const raw = String(value || '').trim();
-  if (!raw) return { folderId: '', images: [] };
+  if (!raw) return [];
 
   const pieces = raw
     .split(/\r?\n|,|;/)
     .map((item) => item.trim())
     .filter(Boolean);
 
-  if (pieces.length <= 1) {
-    const folderId = normalizeDriveFolderId(raw);
-    if (folderId && /^[a-zA-Z0-9-_]{10,}$/.test(folderId)) {
-      return { folderId, images: [] };
-    }
-    return { folderId: '', images: [resolveDriveImageUrl(raw)] };
-  }
-
-  const images = pieces
-    .filter((piece) => /https?:\/\//i.test(piece) || /drive\.google\.com/i.test(piece))
+  return pieces
+    .filter((piece) => {
+      // Skip bare Drive folder links — those can't be rendered as an image.
+      if (/\/folders\//i.test(piece)) return false;
+      const looksLikeUrl = /https?:\/\//i.test(piece) || /drive\.google\.com/i.test(piece);
+      const looksLikeBareId = /^[a-zA-Z0-9-_]{15,}$/.test(piece);
+      return looksLikeUrl || looksLikeBareId;
+    })
     .map((piece) => resolveDriveImageUrl(piece));
-
-  return { folderId: '', images };
 };
-
-const buildFolderEmbedUrl = (folderId) =>
-  `https://drive.google.com/embeddedfolderview?id=${folderId}#list`;
 
 const Gallery = () => {
   const { events } = useSiteData();
@@ -54,25 +52,25 @@ const Gallery = () => {
 
   const galleryEvents = events.filter((event) => normalizeDriveFolderId(event.gallery_folder_id));
   const activeEvent = galleryEvents.find((event) => event.id === eventId) || galleryEvents[0] || null;
-  const galleryData = activeEvent ? parseGallerySources(activeEvent.gallery_folder_id) : { folderId: '', images: [] };
+  const images = activeEvent ? parseGalleryImages(activeEvent.gallery_folder_id) : [];
 
   useEffect(() => {
     const onKeyDown = (event) => {
       if (!selectedImage) return;
       if (event.key === 'Escape') setSelectedImage(null);
       if (event.key === 'ArrowRight') {
-        const nextIndex = (selectedImage.index + 1) % galleryData.images.length;
-        setSelectedImage({ src: galleryData.images[nextIndex], index: nextIndex });
+        const nextIndex = (selectedImage.index + 1) % images.length;
+        setSelectedImage({ src: images[nextIndex], index: nextIndex });
       }
       if (event.key === 'ArrowLeft') {
-        const prevIndex = (selectedImage.index - 1 + galleryData.images.length) % galleryData.images.length;
-        setSelectedImage({ src: galleryData.images[prevIndex], index: prevIndex });
+        const prevIndex = (selectedImage.index - 1 + images.length) % images.length;
+        setSelectedImage({ src: images[prevIndex], index: prevIndex });
       }
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [galleryData.images, selectedImage]);
+  }, [images, selectedImage]);
 
   useEffect(() => {
     if (selectedImage) {
@@ -144,9 +142,9 @@ const Gallery = () => {
                   <h2 className="serif-display text-3xl font-semibold">{activeEvent.title}</h2>
                   {activeEvent.description && <p className="mt-3 text-white/70">{activeEvent.description}</p>}
                 </div>
-                {galleryData.images.length > 0 ? (
+                {images.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                    {galleryData.images.map((image, index) => (
+                    {images.map((image, index) => (
                       <div key={`${image}-${index}`} className="overflow-hidden border border-white/10 bg-black/20">
                         <button
                           type="button"
@@ -167,23 +165,9 @@ const Gallery = () => {
                       </div>
                     ))}
                   </div>
-                ) : galleryData.folderId ? (
-                  <>
-                    <div className="overflow-hidden border border-white/10 bg-black/20">
-                      <iframe
-                        src={buildFolderEmbedUrl(galleryData.folderId)}
-                        title={`${activeEvent.title} gallery`}
-                        className="w-full min-h-[560px]"
-                        loading="lazy"
-                      />
-                    </div>
-                    <p className="mt-3 text-xs text-white/50">
-                      Images are loaded directly from the linked Google Drive folder. Share the folder publicly so guests can view it.
-                    </p>
-                  </>
                 ) : (
                   <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
-                    No gallery images are linked for this event yet.
+                    No gallery images are linked for this event yet. Add individual image links (one per line, or comma/semicolon separated) in the event's gallery field to have them render here.
                   </div>
                 )}
               </>
@@ -208,13 +192,13 @@ const Gallery = () => {
             </button>
             <div className="relative overflow-hidden border border-white/10 bg-black/30">
               <img src={selectedImage.src} alt="Selected gallery image" className="w-full max-h-[75vh] object-contain" />
-              {galleryData.images.length > 1 && (
+              {images.length > 1 && (
                 <>
                   <button
                     type="button"
                     onClick={() => {
-                      const prevIndex = (selectedImage.index - 1 + galleryData.images.length) % galleryData.images.length;
-                      setSelectedImage({ src: galleryData.images[prevIndex], index: prevIndex });
+                      const prevIndex = (selectedImage.index - 1 + images.length) % images.length;
+                      setSelectedImage({ src: images[prevIndex], index: prevIndex });
                     }}
                     className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-blue-950/70 p-3 text-white hover:bg-blue-950"
                     aria-label="Previous image"
@@ -224,8 +208,8 @@ const Gallery = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      const nextIndex = (selectedImage.index + 1) % galleryData.images.length;
-                      setSelectedImage({ src: galleryData.images[nextIndex], index: nextIndex });
+                      const nextIndex = (selectedImage.index + 1) % images.length;
+                      setSelectedImage({ src: images[nextIndex], index: nextIndex });
                     }}
                     className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-blue-950/70 p-3 text-white hover:bg-blue-950"
                     aria-label="Next image"
