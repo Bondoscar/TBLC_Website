@@ -574,17 +574,8 @@ const Dashboard = ({ onSignOut }) => {
                   <Field label="IMAGE URL (Google Drive or external)">
                     <input className={inputCls} value={v.image_url} onChange={(e) => setV({ ...v, image_url: e.target.value })} />
                   </Field>
-                  <Field label="GALLERY: DRIVE FOLDER LINK, OR IMAGE LINKS (ONE PER LINE)">
-                    <textarea
-                      className={inputCls}
-                      rows={4}
-                      placeholder={'Paste ONE of:\n• A single Google Drive folder share link\n• A list of individual image links, one per line'}
-                      value={v.gallery_folder_id || ''}
-                      onChange={(e) => setV({ ...v, gallery_folder_id: e.target.value })}
-                    />
-                    <p className="mt-1 text-[11px] text-white/50">
-                      A Drive folder link pulls in every image in that folder automatically (folder must be shared as "Anyone with the link"). Individual image links give you full control over which pictures show and in what order.
-                    </p>
+                  <Field label="GOOGLE DRIVE FOLDER ID OR IMAGE URL LIST">
+                    <input className={inputCls} value={v.gallery_folder_id || ''} onChange={(e) => setV({ ...v, gallery_folder_id: e.target.value })} />
                   </Field>
                   <ImagePreview url={v.image_url} className="w-full aspect-video" />
                   <div className="grid grid-cols-2 gap-4">

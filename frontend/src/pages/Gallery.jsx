@@ -1,15 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react';
+import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSiteData, imgFrom } from '../context/SiteDataContext';
 
-// Google Drive API key, used to list a folder's contents (Drive doesn't expose
-// this without an API call — there's no keyless way to enumerate a folder).
+// Optional Google Drive API key. If set, folder-based galleries render as a
+// real image grid (with the in-page modal + next/prev). If NOT set, folder
+// galleries fall back to Google's embedded folder view (an iframe) — no key
+// required, but no custom modal/next-prev since it's cross-origin content.
 // Create React App convention shown below. If you're on Vite, swap this line
 // for: const DRIVE_API_KEY = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY || '';
-// The key should be restricted (HTTP referrer + Drive API only) since it's
-// exposed client-side, and the target folder must be shared as
-// "Anyone with the link" or the API call will return no files.
 const DRIVE_API_KEY = process.env.REACT_APP_GOOGLE_DRIVE_API_KEY || '';
 
 const resolveDriveImageUrl = (value = '') => {
@@ -22,10 +21,11 @@ const resolveDriveImageUrl = (value = '') => {
   return raw;
 };
 
-// Figures out what an event's gallery field actually points to:
+const buildFolderEmbedUrl = (folderId) => `https://drive.google.com/embeddedfolderview?id=${folderId}#grid`;
+
+// Figures out what an event's gallery field points to:
 // - "images": one or more individual image links, ready to render as-is
-// - "folder": a single Google Drive folder link/ID whose contents need
-//   to be fetched from the Drive API before they can be rendered
+// - "folder": a single Google Drive folder link/ID
 // - "none": nothing usable
 const getGallerySource = (value = '') => {
   const raw = String(value || '').trim();
@@ -57,21 +57,10 @@ const getGallerySource = (value = '') => {
 };
 
 const fetchDriveFolderImages = async (folderId) => {
-  if (!DRIVE_API_KEY) {
-    const err = new Error('A Google Drive API key is required to load folder images.');
-    err.code = 'missing-api-key';
-    throw err;
-  }
-
   const query = encodeURIComponent(`'${folderId}' in parents and mimeType contains 'image/' and trashed = false`);
   const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${DRIVE_API_KEY}&fields=files(id,name)&orderBy=name&pageSize=1000`;
-
   const res = await fetch(url);
-  if (!res.ok) {
-    const err = new Error('Could not load images from this Google Drive folder. Make sure it is shared as "Anyone with the link".');
-    err.code = 'fetch-failed';
-    throw err;
-  }
+  if (!res.ok) throw new Error(`Drive API request failed (${res.status})`);
   const data = await res.json();
   return (data.files || []).map((file) => `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`);
 };
@@ -81,8 +70,8 @@ const Gallery = () => {
   const { eventId } = useParams();
   const [selectedImage, setSelectedImage] = useState(null);
   const [images, setImages] = useState([]);
+  const [iframeFolderId, setIframeFolderId] = useState(null);
   const [galleryLoading, setGalleryLoading] = useState(false);
-  const [galleryError, setGalleryError] = useState(null);
 
   const galleryEvents = events.filter((event) => String(event.gallery_folder_id || '').trim());
   const activeEvent = galleryEvents.find((event) => event.id === eventId) || galleryEvents[0] || null;
@@ -98,21 +87,38 @@ const Gallery = () => {
     const run = async () => {
       if (gallerySource.type === 'images') {
         setImages(gallerySource.images);
-        setGalleryError(null);
+        setIframeFolderId(null);
         setGalleryLoading(false);
         return;
       }
 
       if (gallerySource.type === 'folder') {
+        // No API key configured — go straight to the keyless iframe embed.
+        if (!DRIVE_API_KEY) {
+          setImages([]);
+          setIframeFolderId(gallerySource.folderId);
+          setGalleryLoading(false);
+          return;
+        }
+
         setGalleryLoading(true);
-        setGalleryError(null);
         try {
           const fetched = await fetchDriveFolderImages(gallerySource.folderId);
-          if (!cancelled) setImages(fetched);
-        } catch (err) {
+          if (cancelled) return;
+          if (fetched.length > 0) {
+            setImages(fetched);
+            setIframeFolderId(null);
+          } else {
+            // Folder returned nothing (could be genuinely empty, or a
+            // permissions issue) — fall back to the iframe so it's still
+            // viewable one way or another.
+            setImages([]);
+            setIframeFolderId(gallerySource.folderId);
+          }
+        } catch (_err) {
           if (!cancelled) {
             setImages([]);
-            setGalleryError(err.message);
+            setIframeFolderId(gallerySource.folderId);
           }
         } finally {
           if (!cancelled) setGalleryLoading(false);
@@ -121,7 +127,7 @@ const Gallery = () => {
       }
 
       setImages([]);
-      setGalleryError(null);
+      setIframeFolderId(null);
       setGalleryLoading(false);
     };
 
@@ -224,11 +230,6 @@ const Gallery = () => {
                   <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
                     Loading images from Google Drive…
                   </div>
-                ) : galleryError ? (
-                  <div className="border border-dashed border-red-300/30 p-10 text-center text-red-200 flex flex-col items-center gap-3">
-                    <AlertCircle size={22} />
-                    <span>{galleryError}</span>
-                  </div>
                 ) : images.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                     {images.map((image, index) => (
@@ -252,11 +253,23 @@ const Gallery = () => {
                       </div>
                     ))}
                   </div>
+                ) : iframeFolderId ? (
+                  <>
+                    <div className="overflow-hidden border border-white/10 bg-black/20">
+                      <iframe
+                        src={buildFolderEmbedUrl(iframeFolderId)}
+                        title={`${activeEvent.title} gallery`}
+                        className="w-full min-h-[560px]"
+                        loading="lazy"
+                      />
+                    </div>
+                    <p className="mt-3 text-xs text-white/50">
+                      Images are loaded directly from the linked Google Drive folder. Share the folder as "Anyone with the link" so visitors can view it.
+                    </p>
+                  </>
                 ) : (
                   <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
-                    {gallerySource.type === 'none'
-                      ? <>No gallery is linked for this event yet. In Admin, paste a Google Drive folder link (shared as "Anyone with the link"), or a list of individual image links, one per line.</>
-                      : <>This Drive folder didn't return any images. Make sure it's shared as "Anyone with the link" and contains image files.</>}
+                    No gallery is linked for this event yet. In Admin, paste a Google Drive folder link (shared as "Anyone with the link"), or a list of individual image links, one per line.
                   </div>
                 )}
               </>
