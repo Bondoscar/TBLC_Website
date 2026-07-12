@@ -18,7 +18,16 @@ const resolveDriveImageUrl = (value = '') => {
   if (match) {
     return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w2000`;
   }
-  return raw;
+  return toSecureUrl(raw);
+};
+
+// Only allow http(s) URLs through, and always upgrade to https — blocks
+// unsafe schemes (javascript:, data:, etc.) an admin might accidentally
+// paste, and guarantees every image is fetched over a secured connection.
+const toSecureUrl = (value = '') => {
+  const raw = String(value || '').trim();
+  if (!/^https?:\/\//i.test(raw)) return '';
+  return raw.replace(/^http:\/\//i, 'https://');
 };
 
 const buildFolderEmbedUrl = (folderId) => `https://drive.google.com/embeddedfolderview?id=${folderId}#grid`;
@@ -34,7 +43,10 @@ const getGallerySource = (value = '') => {
   const pieces = raw.split(/\r?\n|,|;/).map((s) => s.trim()).filter(Boolean);
 
   if (pieces.length > 1) {
-    const images = pieces.filter((p) => !/\/folders\//i.test(p)).map(resolveDriveImageUrl);
+    const images = pieces
+      .filter((p) => !/\/folders\//i.test(p))
+      .map(resolveDriveImageUrl)
+      .filter(Boolean);
     return { type: 'images', images };
   }
 
@@ -44,7 +56,8 @@ const getGallerySource = (value = '') => {
   if (folderMatch) return { type: 'folder', folderId: folderMatch[1] };
 
   if (/https?:\/\//i.test(single)) {
-    return { type: 'images', images: [resolveDriveImageUrl(single)] };
+    const resolved = resolveDriveImageUrl(single);
+    return resolved ? { type: 'images', images: [resolved] } : { type: 'none' };
   }
 
   // A bare alphanumeric string with no URL around it — admins typically
@@ -239,7 +252,13 @@ const Gallery = () => {
                           onClick={() => setSelectedImage({ src: image, index })}
                           className="group block w-full text-left"
                         >
-                          <img src={image} alt={`${activeEvent.title} gallery ${index + 1}`} className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <img
+                            src={image}
+                            alt={`${activeEvent.title} gallery ${index + 1}`}
+                            className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500"
+                            referrerPolicy="no-referrer"
+                            loading="lazy"
+                          />
                         </button>
                         <div className="p-3">
                           <button
@@ -261,15 +280,17 @@ const Gallery = () => {
                         title={`${activeEvent.title} gallery`}
                         className="w-full min-h-[560px]"
                         loading="lazy"
+                        referrerPolicy="no-referrer"
+                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
                       />
                     </div>
                     <p className="mt-3 text-xs text-white/50">
-                      Images are loaded directly from the linked Google Drive folder.
+                      Images are loaded directly from the linked Google Drive folder. Share the folder as "Anyone with the link" so visitors can view it.
                     </p>
                   </>
                 ) : (
                   <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
-                    No gallery is linked for this event yet. 
+                    No gallery is linked for this event yet. In Admin, paste a Google Drive folder link (shared as "Anyone with the link"), or a list of individual image links, one per line.
                   </div>
                 )}
               </>
@@ -293,7 +314,12 @@ const Gallery = () => {
               CLOSE <X size={18} />
             </button>
             <div className="relative overflow-hidden border border-white/10 bg-black/30">
-              <img src={selectedImage.src} alt="Selected gallery image" className="w-full max-h-[75vh] object-contain" />
+              <img
+                src={selectedImage.src}
+                alt="Selected gallery image"
+                className="w-full max-h-[75vh] object-contain"
+                referrerPolicy="no-referrer"
+              />
               {images.length > 1 && (
                 <>
                   <button
