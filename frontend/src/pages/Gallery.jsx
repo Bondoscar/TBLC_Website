@@ -1,14 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react';
 import { useSiteData, imgFrom } from '../context/SiteDataContext';
 
-const normalizeDriveFolderId = (value = '') => {
-  const raw = String(value || '').trim();
-  if (!raw) return '';
-  const match = raw.match(/(?:\/folders\/|id=)([a-zA-Z0-9-_]+)/);
-  return match ? match[1] : raw;
-};
+// Google Drive API key, used to list a folder's contents (Drive doesn't expose
+// this without an API call — there's no keyless way to enumerate a folder).
+// Create React App convention shown below. If you're on Vite, swap this line
+// for: const DRIVE_API_KEY = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY || '';
+// The key should be restricted (HTTP referrer + Drive API only) since it's
+// exposed client-side, and the target folder must be shared as
+// "Anyone with the link" or the API call will return no files.
+const DRIVE_API_KEY = process.env.REACT_APP_GOOGLE_DRIVE_API_KEY || '';
 
 const resolveDriveImageUrl = (value = '') => {
   const raw = String(value || '').trim();
@@ -20,42 +22,114 @@ const resolveDriveImageUrl = (value = '') => {
   return raw;
 };
 
-// Always resolves to a flat list of directly-renderable image URLs.
-// Accepts one or more image URLs / Drive file links, separated by
-// newlines, commas, or semicolons. A bare Drive *folder* link/ID can't be
-// expanded into individual images client-side, so it's skipped rather than
-// embedded — admins should list individual image links instead.
-const parseGalleryImages = (value = '') => {
+// Figures out what an event's gallery field actually points to:
+// - "images": one or more individual image links, ready to render as-is
+// - "folder": a single Google Drive folder link/ID whose contents need
+//   to be fetched from the Drive API before they can be rendered
+// - "none": nothing usable
+const getGallerySource = (value = '') => {
   const raw = String(value || '').trim();
-  if (!raw) return [];
+  if (!raw) return { type: 'none' };
 
-  const pieces = raw
-    .split(/\r?\n|,|;/)
-    .map((item) => item.trim())
-    .filter(Boolean);
+  const pieces = raw.split(/\r?\n|,|;/).map((s) => s.trim()).filter(Boolean);
 
-  return pieces
-    .filter((piece) => {
-      // Skip bare Drive folder links — those can't be rendered as an image.
-      if (/\/folders\//i.test(piece)) return false;
-      const looksLikeUrl = /https?:\/\//i.test(piece) || /drive\.google\.com/i.test(piece);
-      const looksLikeBareId = /^[a-zA-Z0-9-_]{15,}$/.test(piece);
-      return looksLikeUrl || looksLikeBareId;
-    })
-    .map((piece) => resolveDriveImageUrl(piece));
+  if (pieces.length > 1) {
+    const images = pieces.filter((p) => !/\/folders\//i.test(p)).map(resolveDriveImageUrl);
+    return { type: 'images', images };
+  }
+
+  const single = pieces[0];
+
+  const folderMatch = single.match(/\/folders\/([a-zA-Z0-9-_]+)/);
+  if (folderMatch) return { type: 'folder', folderId: folderMatch[1] };
+
+  if (/https?:\/\//i.test(single)) {
+    return { type: 'images', images: [resolveDriveImageUrl(single)] };
+  }
+
+  // A bare alphanumeric string with no URL around it — admins typically
+  // paste this when linking a whole Drive folder, so treat it as a folder ID.
+  if (/^[a-zA-Z0-9-_]{15,}$/.test(single)) {
+    return { type: 'folder', folderId: single };
+  }
+
+  return { type: 'none' };
+};
+
+const fetchDriveFolderImages = async (folderId) => {
+  if (!DRIVE_API_KEY) {
+    const err = new Error('A Google Drive API key is required to load folder images.');
+    err.code = 'missing-api-key';
+    throw err;
+  }
+
+  const query = encodeURIComponent(`'${folderId}' in parents and mimeType contains 'image/' and trashed = false`);
+  const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${DRIVE_API_KEY}&fields=files(id,name)&orderBy=name&pageSize=1000`;
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    const err = new Error('Could not load images from this Google Drive folder. Make sure it is shared as "Anyone with the link".');
+    err.code = 'fetch-failed';
+    throw err;
+  }
+  const data = await res.json();
+  return (data.files || []).map((file) => `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`);
 };
 
 const Gallery = () => {
   const { events } = useSiteData();
   const { eventId } = useParams();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [images, setImages] = useState([]);
+  const [galleryLoading, setGalleryLoading] = useState(false);
+  const [galleryError, setGalleryError] = useState(null);
 
-  const galleryEvents = events.filter((event) => normalizeDriveFolderId(event.gallery_folder_id));
+  const galleryEvents = events.filter((event) => String(event.gallery_folder_id || '').trim());
   const activeEvent = galleryEvents.find((event) => event.id === eventId) || galleryEvents[0] || null;
-  const images = useMemo(
-    () => (activeEvent ? parseGalleryImages(activeEvent.gallery_folder_id) : []),
+
+  const gallerySource = useMemo(
+    () => (activeEvent ? getGallerySource(activeEvent.gallery_folder_id) : { type: 'none' }),
     [activeEvent]
   );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const run = async () => {
+      if (gallerySource.type === 'images') {
+        setImages(gallerySource.images);
+        setGalleryError(null);
+        setGalleryLoading(false);
+        return;
+      }
+
+      if (gallerySource.type === 'folder') {
+        setGalleryLoading(true);
+        setGalleryError(null);
+        try {
+          const fetched = await fetchDriveFolderImages(gallerySource.folderId);
+          if (!cancelled) setImages(fetched);
+        } catch (err) {
+          if (!cancelled) {
+            setImages([]);
+            setGalleryError(err.message);
+          }
+        } finally {
+          if (!cancelled) setGalleryLoading(false);
+        }
+        return;
+      }
+
+      setImages([]);
+      setGalleryError(null);
+      setGalleryLoading(false);
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [gallerySource]);
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -145,7 +219,17 @@ const Gallery = () => {
                   <h2 className="serif-display text-3xl font-semibold">{activeEvent.title}</h2>
                   {activeEvent.description && <p className="mt-3 text-white/70">{activeEvent.description}</p>}
                 </div>
-                {images.length > 0 ? (
+
+                {galleryLoading ? (
+                  <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
+                    Loading images from Google Drive…
+                  </div>
+                ) : galleryError ? (
+                  <div className="border border-dashed border-red-300/30 p-10 text-center text-red-200 flex flex-col items-center gap-3">
+                    <AlertCircle size={22} />
+                    <span>{galleryError}</span>
+                  </div>
+                ) : images.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                     {images.map((image, index) => (
                       <div key={`${image}-${index}`} className="overflow-hidden border border-white/10 bg-black/20">
@@ -170,7 +254,9 @@ const Gallery = () => {
                   </div>
                 ) : (
                   <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
-                    No gallery images are linked for this event yet. Add individual image links (one per line, or comma/semicolon separated) in the event's gallery field to have them render here.
+                    {gallerySource.type === 'none'
+                      ? <>No gallery is linked for this event yet. In Admin, paste a Google Drive folder link (shared as "Anyone with the link"), or a list of individual image links, one per line.</>
+                      : <>This Drive folder didn't return any images. Make sure it's shared as "Anyone with the link" and contains image files.</>}
                   </div>
                 )}
               </>
