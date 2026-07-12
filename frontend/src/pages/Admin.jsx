@@ -385,7 +385,7 @@ const SettingsPanel = ({ onAfterChange }) => {
       <section className="border border-white/15 p-5">
         <h3 className="serif-display text-xl font-semibold mb-4">Donate Page Content</h3>
         <p className="text-white/60 text-xs mb-4">
-          Manage the donate hero image and card-style donation options with Google Drive image URLs.
+          Manage the donate hero image and each payment option with Google Drive image URLs and action links.
         </p>
         <div className="grid grid-cols-1 gap-4">
           <Field label="HERO IMAGE URL">
@@ -412,8 +412,18 @@ const SettingsPanel = ({ onAfterChange }) => {
             </Field>
           </div>
           {(data.donate_content?.cards || []).map((card, index) => (
-            <div key={index} className="border border-white/10 p-4 space-y-3">
-              <div className="text-sm tracking-[0.2em] text-white/60">CARD {index + 1}</div>
+            <div key={`donate-card-${index}`} className="border border-white/10 p-4 space-y-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-sm tracking-[0.2em] text-white/60">PAYMENT OPTION {index + 1}</div>
+                <Btn
+                  variant="danger"
+                  onClick={() => {
+                    const nextCards = [...(data.donate_content?.cards || [])];
+                    nextCards.splice(index, 1);
+                    setData({ ...data, donate_content: { ...data.donate_content, cards: nextCards } });
+                  }}
+                >Remove</Btn>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Field label="TITLE">
                   <input
@@ -450,10 +460,11 @@ const SettingsPanel = ({ onAfterChange }) => {
                   }}
                 />
               </Field>
-              <Field label="IMAGE URL">
+              <Field label="IMAGE URL (Google Drive or external)">
                 <input
                   className={inputCls}
                   value={card.image_url || ''}
+                  placeholder="https://drive.google.com/file/d/.../view"
                   onChange={(e) => {
                     const nextCards = [...(data.donate_content?.cards || [])];
                     nextCards[index] = { ...card, image_url: e.target.value };
@@ -461,10 +472,11 @@ const SettingsPanel = ({ onAfterChange }) => {
                   }}
                 />
               </Field>
-              <Field label="LINK URL">
+              <Field label="LINK URL / PAYMENT ACTION">
                 <input
                   className={inputCls}
                   value={card.link || ''}
+                  placeholder="https://example.com/pay or mailto:..."
                   onChange={(e) => {
                     const nextCards = [...(data.donate_content?.cards || [])];
                     nextCards[index] = { ...card, link: e.target.value };
@@ -472,12 +484,13 @@ const SettingsPanel = ({ onAfterChange }) => {
                   }}
                 />
               </Field>
+              {card.image_url && <ImagePreview url={card.image_url} className="w-full aspect-[16/9]" />}
             </div>
           ))}
           <Btn
             variant="outline"
-            onClick={() => setData({ ...data, donate_content: { ...data.donate_content, cards: [...(data.donate_content?.cards || []), { title: '', description: '', image_url: '', button_label: '', link: '' }] } })}
-          >+ Add Donation Card</Btn>
+            onClick={() => setData({ ...data, donate_content: { ...data.donate_content, cards: [...(data.donate_content?.cards || []), { title: 'New Payment Option', description: '', image_url: 'https://drive.google.com/file/d/1SKrRc-EEL1UBCSTqPi1ZkmTYDhLGOwjJ/view', button_label: 'Pay Now', link: '' }] } })}
+          >+ Add Payment Option</Btn>
         </div>
         <div className="mt-4"><Btn onClick={() => save('donate_content', data.donate_content)} data-testid="save-donate-content">Save Donate Content</Btn></div>
       </section>
