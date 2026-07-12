@@ -17,22 +17,9 @@ const Give = () => {
   const imgs = settings.site_images || {};
   const donateContent = settings.donate_content || {};
   const bannerImage = resolveDriveImageUrl(donateContent.hero_image_direct || donateContent.hero_image || imgs.banner_direct || imgs.banner || '');
-  const cards = Array.isArray(donateContent.cards) && donateContent.cards.length > 0
-    ? donateContent.cards
-    : [
-        {
-          title: 'Building Project',
-          description: 'Support the church building project through Interac E-Transfer.',
-          image_url: 'https://drive.google.com/file/d/1SKrRc-EEL1UBCSTqPi1ZkmTYDhLGOwjJ/view',
-          button_label: 'Interac E-Transfer : tblcbuilding@gmail.com',          
-        },
-        {
-          title: 'Tithes & Seed Offerings',
-          description: 'Support the ongoing ministry of The Better Life Church.',
-          image_url: 'https://drive.google.com/file/d/1SKrRc-EEL1UBCSTqPi1ZkmTYDhLGOwjJ/view',
-          button_label: 'Interac E-Transfer : tblccanada@gmail.com',          
-        },
-      ];
+  const cards = Array.isArray(donateContent.cards)
+    ? donateContent.cards.filter((card) => card && (card.title || card.description || card.button_label || card.link || card.image_url || card.image_direct_url))
+    : [];
 
   return (
     <div className="bg-blue-950 text-white" data-testid="donate-page">
@@ -58,30 +45,36 @@ const Give = () => {
       </section>
 
       <section className="pb-20 px-6 lg:px-10">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          {cards.map((card, index) => (
-            <div key={`${card.title}-${index}`} className="border-2 border-white/20 card-hover overflow-hidden">
-              <div className="aspect-[16/9] overflow-hidden bg-white/10">
-                {card.image_url || card.image_direct_url ? (
-                  <img src={resolveDriveImageUrl(card.image_direct_url || card.image_url)} alt={card.title} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white/60">
-                    <Mail size={28} />
+        {cards.length > 0 ? (
+          <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            {cards.map((card, index) => (
+              <div key={`${card.title}-${index}`} className="border-2 border-white/20 card-hover overflow-hidden">
+                <div className="aspect-[16/9] overflow-hidden bg-white/10">
+                  {card.image_url || card.image_direct_url ? (
+                    <img src={resolveDriveImageUrl(card.image_direct_url || card.image_url)} alt={card.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-white/60">
+                      <Mail size={28} />
+                    </div>
+                  )}
+                </div>
+                <div className="p-7">
+                  <h3 className="serif-display text-2xl font-semibold">{card.title}</h3>
+                  {card.description && <p className="mt-4 text-white/75 leading-relaxed">{card.description}</p>}
+                  <div className="mt-6">
+                    <a href={card.link || '#'} className="btn-outline inline-flex items-center gap-2" target={card.link?.startsWith('http') ? '_blank' : undefined} rel={card.link?.startsWith('http') ? 'noreferrer' : undefined}>
+                      {card.button_label || 'Learn More'} <ArrowRight size={14} />
+                    </a>
                   </div>
-                )}
-              </div>
-              <div className="p-7">
-                <h3 className="serif-display text-2xl font-semibold">{card.title}</h3>
-                {card.description && <p className="mt-4 text-white/75 leading-relaxed">{card.description}</p>}
-                <div className="mt-6">
-                  <a href={card.link || '#'} className="btn-outline inline-flex items-center gap-2">
-                    {card.button_label || 'Learn More'} <ArrowRight size={14} />
-                  </a>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="max-w-[900px] mx-auto border border-dashed border-white/20 p-10 text-center text-white/60">
+            Donation options will appear here once they are added from admin.
+          </div>
+        )}
         <p className="text-center text-white/70 mt-12 max-w-[780px] mx-auto leading-relaxed">
           Thank you for your faithful support of The Better Life Church. It is because of your regular donations that we can reach out locally and online in proclaiming the gospel of Jesus Christ!
         </p>
