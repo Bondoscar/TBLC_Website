@@ -264,12 +264,12 @@ const Gallery = () => {
                       />
                     </div>
                     <p className="mt-3 text-xs text-white/50">
-                      Images are loaded directly from the linked Google Drive folder. Share the folder as "Anyone with the link" so visitors can view it.
+                      Images are loaded directly from the linked Google Drive folder.
                     </p>
                   </>
                 ) : (
                   <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
-                    No gallery is linked for this event yet. In Admin, paste a Google Drive folder link (shared as "Anyone with the link"), or a list of individual image links, one per line.
+                    No gallery is linked for this event yet. 
                   </div>
                 )}
               </>
