@@ -82,7 +82,7 @@ const Give = () => {
           </div>
         ) : (
           <div className="max-w-[900px] mx-auto border border-dashed border-white/20 p-10 text-center text-white/60">
-            Donation options will appear here once they are added from admin.
+            Donation options will appear here once they have been set up in the admin panel.
           </div>
         )}
         <p className="text-center text-white/70 mt-12 max-w-[780px] mx-auto leading-relaxed">
