@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowRight, ImageIcon } from 'lucide-react';
+import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSiteData, imgFrom } from '../context/SiteDataContext';
 
 const normalizeDriveFolderId = (value = '') => {
@@ -50,10 +50,29 @@ const buildFolderEmbedUrl = (folderId) =>
 const Gallery = () => {
   const { events } = useSiteData();
   const { eventId } = useParams();
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const galleryEvents = events.filter((event) => normalizeDriveFolderId(event.gallery_folder_id));
   const activeEvent = galleryEvents.find((event) => event.id === eventId) || galleryEvents[0] || null;
   const galleryData = activeEvent ? parseGallerySources(activeEvent.gallery_folder_id) : { folderId: '', images: [] };
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if (!selectedImage) return;
+      if (event.key === 'Escape') setSelectedImage(null);
+      if (event.key === 'ArrowRight') {
+        const nextIndex = (selectedImage.index + 1) % galleryData.images.length;
+        setSelectedImage({ ...galleryData.images[nextIndex], index: nextIndex });
+      }
+      if (event.key === 'ArrowLeft') {
+        const prevIndex = (selectedImage.index - 1 + galleryData.images.length) % galleryData.images.length;
+        setSelectedImage({ ...galleryData.images[prevIndex], index: prevIndex });
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [galleryData.images, selectedImage]);
 
   return (
     <div className="bg-blue-950 text-white" data-testid="gallery-page">
@@ -118,15 +137,14 @@ const Gallery = () => {
                 {galleryData.images.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                     {galleryData.images.map((image, index) => (
-                      <a
+                      <button
                         key={`${image}-${index}`}
-                        href={image}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="group overflow-hidden border border-white/10 bg-black/20"
+                        type="button"
+                        onClick={() => setSelectedImage({ src: image, index })}
+                        className="group overflow-hidden border border-white/10 bg-black/20 text-left"
                       >
                         <img src={image} alt={`${activeEvent.title} gallery ${index + 1}`} className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500" />
-                      </a>
+                      </button>
                     ))}
                   </div>
                 ) : galleryData.folderId ? (
@@ -157,6 +175,49 @@ const Gallery = () => {
           </div>
         </div>
       </section>
+
+      {selectedImage && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-blue-950/95 px-4 py-6" onClick={() => setSelectedImage(null)}>
+          <div className="relative w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              onClick={() => setSelectedImage(null)}
+              className="absolute right-0 -top-12 flex items-center gap-2 text-sm tracking-[0.2em] text-white/80 hover:text-white"
+            >
+              CLOSE <X size={18} />
+            </button>
+            <div className="relative overflow-hidden border border-white/10 bg-black/30">
+              <img src={selectedImage.src} alt="Selected gallery image" className="w-full max-h-[75vh] object-contain" />
+              {galleryData.images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const prevIndex = (selectedImage.index - 1 + galleryData.images.length) % galleryData.images.length;
+                      setSelectedImage({ src: galleryData.images[prevIndex], index: prevIndex });
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-blue-950/70 p-3 text-white hover:bg-blue-950"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={22} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextIndex = (selectedImage.index + 1) % galleryData.images.length;
+                      setSelectedImage({ src: galleryData.images[nextIndex], index: nextIndex });
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-blue-950/70 p-3 text-white hover:bg-blue-950"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight size={22} />
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
