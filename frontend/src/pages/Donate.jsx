@@ -17,9 +17,14 @@ const Give = () => {
   const imgs = settings.site_images || {};
   const donateContent = settings.donate_content || {};
   const bannerImage = resolveDriveImageUrl(donateContent.hero_image_direct || donateContent.hero_image || imgs.banner_direct || imgs.banner || '');
-  const cards = Array.isArray(donateContent.cards)
-    ? donateContent.cards.filter((card) => card && (card.title || card.description || card.button_label || card.link || card.image_url || card.image_direct_url))
-    : [];
+  const rawCards = Array.isArray(donateContent.cards)
+    ? donateContent.cards
+    : Array.isArray(donateContent.payment_options)
+      ? donateContent.payment_options
+      : Array.isArray(donateContent.options)
+        ? donateContent.options
+        : [];
+  const cards = rawCards.filter((card) => card && (card.title || card.description || card.button_label || card.link || card.payment_link || card.url || card.image_url || card.image_direct_url));
 
   return (
     <div className="bg-blue-950 text-white" data-testid="donate-page">
@@ -62,7 +67,12 @@ const Give = () => {
                   <h3 className="serif-display text-2xl font-semibold">{card.title}</h3>
                   {card.description && <p className="mt-4 text-white/75 leading-relaxed">{card.description}</p>}
                   <div className="mt-6">
-                    <a href={card.link || '#'} className="btn-outline inline-flex items-center gap-2" target={card.link?.startsWith('http') ? '_blank' : undefined} rel={card.link?.startsWith('http') ? 'noreferrer' : undefined}>
+                    <a
+                      href={card.link || card.payment_link || card.url || '#'}
+                      className="btn-outline inline-flex items-center gap-2"
+                      target={card.link || card.payment_link || card.url ? '_blank' : undefined}
+                      rel={card.link || card.payment_link || card.url ? 'noreferrer' : undefined}
+                    >
                       {card.button_label || 'Learn More'} <ArrowRight size={14} />
                     </a>
                   </div>
