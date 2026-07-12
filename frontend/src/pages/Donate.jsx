@@ -1,12 +1,22 @@
 import React from 'react';
 import { ArrowRight, Mail } from 'lucide-react';
-import { useSiteData, imgFrom } from '../context/SiteDataContext';
+import { useSiteData } from '../context/SiteDataContext';
+
+const resolveDriveImageUrl = (value = '') => {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  const match = raw.match(/(?:\/d\/|id=)([a-zA-Z0-9-_]+)/);
+  if (match) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w2000`;
+  }
+  return raw;
+};
 
 const Give = () => {
   const { settings } = useSiteData();
   const imgs = settings.site_images || {};
   const donateContent = settings.donate_content || {};
-  const bannerImage = donateContent.hero_image_direct || donateContent.hero_image || imgs.banner_direct || imgs.banner || '';
+  const bannerImage = resolveDriveImageUrl(donateContent.hero_image_direct || donateContent.hero_image || imgs.banner_direct || imgs.banner || '');
   const cards = Array.isArray(donateContent.cards) && donateContent.cards.length > 0
     ? donateContent.cards
     : [
@@ -55,7 +65,7 @@ const Give = () => {
             <div key={`${card.title}-${index}`} className="border-2 border-white/20 card-hover overflow-hidden">
               <div className="aspect-[16/9] overflow-hidden bg-white/10">
                 {card.image_url || card.image_direct_url ? (
-                  <img src={card.image_direct_url || card.image_url} alt={card.title} className="w-full h-full object-cover" />
+                  <img src={resolveDriveImageUrl(card.image_direct_url || card.image_url)} alt={card.title} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-white/60">
                     <Mail size={28} />

@@ -26,7 +26,7 @@ const Gallery = () => {
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">GALLERY</div>
         <h1 className="hero-title text-4xl md:text-6xl">Event Galleries</h1>
         <p className="mt-5 text-white/70 max-w-[760px] mx-auto">
-          Browse photos from our church events directly from Google Drive folders linked to each event.
+          Browse photos from our church events.
         </p>
       </section>
 
