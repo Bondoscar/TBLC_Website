@@ -489,7 +489,18 @@ const SettingsPanel = ({ onAfterChange }) => {
           ))}
           <Btn
             variant="outline"
-            onClick={() => setData({ ...data, donate_content: { ...data.donate_content, cards: [...(data.donate_content?.cards || []), { title: 'New Payment Option', description: '', image_url: 'https://drive.google.com/file/d/1SKrRc-EEL1UBCSTqPi1ZkmTYDhLGOwjJ/view', button_label: 'Pay Now', link: '' }] } })}
+            onClick={() =>
+              setData({
+                ...data,
+                donate_content: {
+                  ...data.donate_content,
+                  cards: [
+                    ...(data.donate_content?.cards || []),
+                    { title: 'New Payment Option', description: '', image_url: '', button_label: 'Pay Now', link: '' },
+                  ],
+                },
+              })
+            }
           >+ Add Payment Option</Btn>
         </div>
         <div className="mt-4"><Btn onClick={() => save('donate_content', data.donate_content)} data-testid="save-donate-content">Save Donate Content</Btn></div>
