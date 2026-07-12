@@ -23,16 +23,14 @@ const Give = () => {
         {
           title: 'Building Project',
           description: 'Support the church building project through Interac E-Transfer.',
-          image_url: '',
-          button_label: 'Interac E-Transfer : tblcbuilding@gmail.com',
-          link: 'mailto:tblcbuilding@gmail.com',
+          image_url: 'https://drive.google.com/file/d/1E1fXJ7ifDGki5ESNkg26lvumPX0TBWcO/view?usp=sharing',
+          button_label: 'Interac E-Transfer : tblcbuilding@gmail.com',          
         },
         {
           title: 'Tithes & Seed Offerings',
           description: 'Support the ongoing ministry of The Better Life Church.',
-          image_url: '',
-          button_label: 'Interac E-Transfer : tblccanada@gmail.com',
-          link: 'mailto:tblccanada@gmail.com',
+          image_url: 'https://drive.google.com/file/d/1E1fXJ7ifDGki5ESNkg26lvumPX0TBWcO/view?usp=sharing',
+          button_label: 'Interac E-Transfer : tblccanada@gmail.com',          
         },
       ];
 
