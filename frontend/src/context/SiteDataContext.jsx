@@ -40,6 +40,7 @@ export const SiteDataProvider = ({ children }) => {
           social_links: res.settings?.social_links || {},
           about_content: res.settings?.about_content || { beliefs: [] },
           site_images: res.settings?.site_images || {},
+          donate_content: res.settings?.donate_content || { hero_image: '', hero_title: '', hero_subtitle: '', cards: [] },
         },
       });
       setError(null);
