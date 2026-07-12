@@ -137,14 +137,25 @@ const Gallery = () => {
                 {galleryData.images.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                     {galleryData.images.map((image, index) => (
-                      <button
-                        key={`${image}-${index}`}
-                        type="button"
-                        onClick={() => setSelectedImage({ src: image, index })}
-                        className="group overflow-hidden border border-white/10 bg-black/20 text-left"
-                      >
-                        <img src={image} alt={`${activeEvent.title} gallery ${index + 1}`} className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500" />
-                      </button>
+                      <div key={`${image}-${index}`} className="overflow-hidden border border-white/10 bg-black/20">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedImage({ src: image, index })}
+                          className="group block w-full text-left"
+                        >
+                          <img src={image} alt={`${activeEvent.title} gallery ${index + 1}`} className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500" />
+                        </button>
+                        <div className="p-3">
+                          <a
+                            href={image}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white"
+                          >
+                            View picture <ArrowRight size={14} />
+                          </a>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 ) : galleryData.folderId ? (
