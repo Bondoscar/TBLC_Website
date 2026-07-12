@@ -550,7 +550,7 @@ const Dashboard = ({ onSignOut }) => {
                   <Field label="IMAGE URL (Google Drive or external)">
                     <input className={inputCls} value={v.image_url} onChange={(e) => setV({ ...v, image_url: e.target.value })} />
                   </Field>
-                  <Field label="GOOGLE DRIVE EVENT FOLDER ID OR SHARE URL">
+                  <Field label="GOOGLE DRIVE FOLDER ID OR IMAGE URL LIST">
                     <input className={inputCls} value={v.gallery_folder_id || ''} onChange={(e) => setV({ ...v, gallery_folder_id: e.target.value })} />
                   </Field>
                   <ImagePreview url={v.image_url} className="w-full aspect-video" />

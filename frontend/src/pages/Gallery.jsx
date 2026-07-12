@@ -10,6 +10,40 @@ const normalizeDriveFolderId = (value = '') => {
   return match ? match[1] : raw;
 };
 
+const resolveDriveImageUrl = (value = '') => {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  const match = raw.match(/(?:\/d\/|id=)([a-zA-Z0-9-_]+)/);
+  if (match) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w2000`;
+  }
+  return raw;
+};
+
+const parseGallerySources = (value = '') => {
+  const raw = String(value || '').trim();
+  if (!raw) return { folderId: '', images: [] };
+
+  const pieces = raw
+    .split(/\r?\n|,|;/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  if (pieces.length <= 1) {
+    const folderId = normalizeDriveFolderId(raw);
+    if (folderId && /^[a-zA-Z0-9-_]{10,}$/.test(folderId)) {
+      return { folderId, images: [] };
+    }
+    return { folderId: '', images: [resolveDriveImageUrl(raw)] };
+  }
+
+  const images = pieces
+    .filter((piece) => /https?:\/\//i.test(piece) || /drive\.google\.com/i.test(piece))
+    .map((piece) => resolveDriveImageUrl(piece));
+
+  return { folderId: '', images };
+};
+
 const buildFolderEmbedUrl = (folderId) =>
   `https://drive.google.com/embeddedfolderview?id=${folderId}#list`;
 
@@ -19,6 +53,7 @@ const Gallery = () => {
 
   const galleryEvents = events.filter((event) => normalizeDriveFolderId(event.gallery_folder_id));
   const activeEvent = galleryEvents.find((event) => event.id === eventId) || galleryEvents[0] || null;
+  const galleryData = activeEvent ? parseGallerySources(activeEvent.gallery_folder_id) : { folderId: '', images: [] };
 
   return (
     <div className="bg-blue-950 text-white" data-testid="gallery-page">
@@ -80,17 +115,39 @@ const Gallery = () => {
                   <h2 className="serif-display text-3xl font-semibold">{activeEvent.title}</h2>
                   {activeEvent.description && <p className="mt-3 text-white/70">{activeEvent.description}</p>}
                 </div>
-                <div className="overflow-hidden border border-white/10 bg-black/20">
-                  <iframe
-                    src={buildFolderEmbedUrl(normalizeDriveFolderId(activeEvent.gallery_folder_id))}
-                    title={`${activeEvent.title} gallery`}
-                    className="w-full min-h-[560px]"
-                    loading="lazy"
-                  />
-                </div>
-                <p className="mt-3 text-xs text-white/50">
-                  Images are loaded directly from the linked Google Drive folder. Share the folder publicly so guests can view it.
-                </p>
+                {galleryData.images.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {galleryData.images.map((image, index) => (
+                      <a
+                        key={`${image}-${index}`}
+                        href={image}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group overflow-hidden border border-white/10 bg-black/20"
+                      >
+                        <img src={image} alt={`${activeEvent.title} gallery ${index + 1}`} className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500" />
+                      </a>
+                    ))}
+                  </div>
+                ) : galleryData.folderId ? (
+                  <>
+                    <div className="overflow-hidden border border-white/10 bg-black/20">
+                      <iframe
+                        src={buildFolderEmbedUrl(galleryData.folderId)}
+                        title={`${activeEvent.title} gallery`}
+                        className="w-full min-h-[560px]"
+                        loading="lazy"
+                      />
+                    </div>
+                    <p className="mt-3 text-xs text-white/50">
+                      Images are loaded directly from the linked Google Drive folder. Share the folder publicly so guests can view it.
+                    </p>
+                  </>
+                ) : (
+                  <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
+                    No gallery images are linked for this event yet.
+                  </div>
+                )}
               </>
             ) : (
               <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
