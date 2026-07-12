@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSiteData, imgFrom } from '../context/SiteDataContext';
@@ -52,7 +52,10 @@ const Gallery = () => {
 
   const galleryEvents = events.filter((event) => normalizeDriveFolderId(event.gallery_folder_id));
   const activeEvent = galleryEvents.find((event) => event.id === eventId) || galleryEvents[0] || null;
-  const images = activeEvent ? parseGalleryImages(activeEvent.gallery_folder_id) : [];
+  const images = useMemo(
+    () => (activeEvent ? parseGalleryImages(activeEvent.gallery_folder_id) : []),
+    [activeEvent]
+  );
 
   useEffect(() => {
     const onKeyDown = (event) => {
