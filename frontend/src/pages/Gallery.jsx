@@ -156,14 +156,13 @@ const Gallery = () => {
                           <img src={image} alt={`${activeEvent.title} gallery ${index + 1}`} className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500" />
                         </button>
                         <div className="p-3">
-                          <a
-                            href={image}
-                            target="_blank"
-                            rel="noreferrer"
+                          <button
+                            type="button"
+                            onClick={() => setSelectedImage({ src: image, index })}
                             className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white"
                           >
                             View picture <ArrowRight size={14} />
-                          </a>
+                          </button>
                         </div>
                       </div>
                     ))}
