@@ -36,6 +36,7 @@ class EventBase(BaseModel):
     time: str = ""                 # free-form: "10AM"
     description: str = ""
     image_url: str = ""            # Google Drive URL or external URL
+    gallery_folder_id: str = ""    # Google Drive folder ID for event gallery
     order: int = 0                 # for sorting
     published: bool = True
 

@@ -11,6 +11,7 @@ export const navLinks = [
   // { name: 'MINISTRIES', path: '/ministries' },
   { name: 'MEDIA', path: '/media' },
   { name: 'EVENTS', path: '/events' },
+  { name: 'GALLERY', path: '/gallery' },
   { name: 'DONATE', path: '/Donate' },
   // { name: 'RESOURCES', path: '/resources' },
 ];

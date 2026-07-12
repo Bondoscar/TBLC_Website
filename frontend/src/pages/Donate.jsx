@@ -1,11 +1,30 @@
 import React from 'react';
-import { CreditCard, Mail, Heart } from 'lucide-react';
-import { useSiteData } from '../context/SiteDataContext';
+import { ArrowRight, Mail } from 'lucide-react';
+import { useSiteData, imgFrom } from '../context/SiteDataContext';
 
 const Give = () => {
   const { settings } = useSiteData();
   const imgs = settings.site_images || {};
-  const bannerImage = imgs.banner_direct || imgs.banner || '';
+  const donateContent = settings.donate_content || {};
+  const bannerImage = donateContent.hero_image_direct || donateContent.hero_image || imgs.banner_direct || imgs.banner || '';
+  const cards = Array.isArray(donateContent.cards) && donateContent.cards.length > 0
+    ? donateContent.cards
+    : [
+        {
+          title: 'Building Project',
+          description: 'Support the church building project through Interac E-Transfer.',
+          image_url: '',
+          button_label: 'Email to Give',
+          link: 'mailto:tblcbuilding@gmail.com',
+        },
+        {
+          title: 'Tithes & Seed Offerings',
+          description: 'Support the ongoing ministry of The Better Life Church.',
+          image_url: '',
+          button_label: 'Email to Give',
+          link: 'mailto:tblccanada@gmail.com',
+        },
+      ];
 
   return (
     <div className="bg-blue-950 text-white" data-testid="donate-page">
@@ -15,7 +34,8 @@ const Give = () => {
         <div className="relative h-full flex items-center justify-center text-center px-6">
           <div>
             <div className="text-xs tracking-[0.3em] text-white/70 mb-3">Donate</div>
-            <h1 className="hero-title text-4xl md:text-6xl">Donation</h1>
+            <h1 className="hero-title text-4xl md:text-6xl">{donateContent.hero_title || 'Donation'}</h1>
+            {donateContent.hero_subtitle && <p className="mt-4 text-white/75 max-w-[700px] mx-auto">{donateContent.hero_subtitle}</p>}
           </div>
         </div>
       </section>
@@ -30,29 +50,33 @@ const Give = () => {
       </section>
 
       <section className="pb-20 px-6 lg:px-10">
-        <div className="max-w-[1100px] mx-auto">
-          <h2 className="section-title text-center mb-10">How to Donate</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <a href="mailto:tblcbuilding@gmail.com" className="border-2 border-white/20 p-8 card-hover block">
-              <Mail size={28} className="text-white mb-4" />
-              <h3 className="serif-display text-xl font-semibold mb-2">Interac E-Transfer:</h3>
-              <p className="text-white/70 text-sm leading-relaxed">Church Building Project: tblcbuilding@gmail.com</p>
-            </a>
-           {/*  <a href="https://www.paypal.com" target="_blank" rel="noreferrer" className="border-2 border-white/20 p-8 card-hover block">
-              <Heart size={28} className="text-white mb-4" />
-              <h3 className="serif-display text-xl font-semibold mb-2">PayPal Donations</h3>
-              <p className="text-white/70 text-sm leading-relaxed">Support the church by making a one-time contribution or establishing a recurring contribution through PayPal.</p>
-            </a> */}
-            <a href="mailto:tblccanada@gmail.com" className="border-2 border-white/20 p-8 card-hover block">
-              <Mail size={28} className="text-white mb-4" />
-              <h3 className="serif-display text-xl font-semibold mb-2">Interac E-Transfer</h3>
-              <p className="text-white/70 text-sm leading-relaxed">Tithes & Seed Offerings: tblccanada@gmail.com</p>
-            </a>
-          </div>
-          <p className="text-center text-white/70 mt-12 max-w-[780px] mx-auto leading-relaxed">
-            Thank you for your faithful support of The Better Life Church. It is because of your regular donations that we can reach out locally and online in proclaiming the gospel of Jesus Christ!
-          </p>
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+          {cards.map((card, index) => (
+            <div key={`${card.title}-${index}`} className="border-2 border-white/20 card-hover overflow-hidden">
+              <div className="aspect-[16/9] overflow-hidden bg-white/10">
+                {card.image_url || card.image_direct_url ? (
+                  <img src={card.image_direct_url || card.image_url} alt={card.title} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white/60">
+                    <Mail size={28} />
+                  </div>
+                )}
+              </div>
+              <div className="p-7">
+                <h3 className="serif-display text-2xl font-semibold">{card.title}</h3>
+                {card.description && <p className="mt-4 text-white/75 leading-relaxed">{card.description}</p>}
+                <div className="mt-6">
+                  <a href={card.link || '#'} className="btn-outline inline-flex items-center gap-2">
+                    {card.button_label || 'Learn More'} <ArrowRight size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
+        <p className="text-center text-white/70 mt-12 max-w-[780px] mx-auto leading-relaxed">
+          Thank you for your faithful support of The Better Life Church. It is because of your regular donations that we can reach out locally and online in proclaiming the gospel of Jesus Christ!
+        </p>
       </section>
     </div>
   );

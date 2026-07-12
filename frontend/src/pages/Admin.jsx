@@ -237,6 +237,7 @@ const SettingsPanel = ({ onAfterChange }) => {
     social_links: {},
     about_content: { beliefs: [] },
     site_images: {},
+    donate_content: { hero_image: '', hero_title: '', hero_subtitle: '', cards: [] },
   });
   const [loading, setLoading] = useState(true);
 
@@ -249,6 +250,7 @@ const SettingsPanel = ({ onAfterChange }) => {
         social_links: d.social_links || {},
         about_content: { beliefs: [], ...(d.about_content || {}) },
         site_images: d.site_images || {},
+        donate_content: d.donate_content || { hero_image: '', hero_title: '', hero_subtitle: '', cards: [] },
       });
     } catch (e) {
       toast({ title: 'Failed to load settings', description: e?.message });
@@ -378,6 +380,107 @@ const SettingsPanel = ({ onAfterChange }) => {
         </div>
         <div className="mt-4"><Btn onClick={() => save('site_images', data.site_images)} data-testid="save-site-images">Save Site Images</Btn></div>
       </section>
+
+      {/* Donate page content */}
+      <section className="border border-white/15 p-5">
+        <h3 className="serif-display text-xl font-semibold mb-4">Donate Page Content</h3>
+        <p className="text-white/60 text-xs mb-4">
+          Manage the donate hero image and card-style donation options with Google Drive image URLs.
+        </p>
+        <div className="grid grid-cols-1 gap-4">
+          <Field label="HERO IMAGE URL">
+            <input
+              className={inputCls}
+              value={data.donate_content?.hero_image ?? ''}
+              onChange={(e) => setData({ ...data, donate_content: { ...data.donate_content, hero_image: e.target.value } })}
+            />
+          </Field>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Field label="HERO TITLE">
+              <input
+                className={inputCls}
+                value={data.donate_content?.hero_title ?? ''}
+                onChange={(e) => setData({ ...data, donate_content: { ...data.donate_content, hero_title: e.target.value } })}
+              />
+            </Field>
+            <Field label="HERO SUBTITLE">
+              <input
+                className={inputCls}
+                value={data.donate_content?.hero_subtitle ?? ''}
+                onChange={(e) => setData({ ...data, donate_content: { ...data.donate_content, hero_subtitle: e.target.value } })}
+              />
+            </Field>
+          </div>
+          {(data.donate_content?.cards || []).map((card, index) => (
+            <div key={index} className="border border-white/10 p-4 space-y-3">
+              <div className="text-sm tracking-[0.2em] text-white/60">CARD {index + 1}</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Field label="TITLE">
+                  <input
+                    className={inputCls}
+                    value={card.title || ''}
+                    onChange={(e) => {
+                      const nextCards = [...(data.donate_content?.cards || [])];
+                      nextCards[index] = { ...card, title: e.target.value };
+                      setData({ ...data, donate_content: { ...data.donate_content, cards: nextCards } });
+                    }}
+                  />
+                </Field>
+                <Field label="BUTTON LABEL">
+                  <input
+                    className={inputCls}
+                    value={card.button_label || ''}
+                    onChange={(e) => {
+                      const nextCards = [...(data.donate_content?.cards || [])];
+                      nextCards[index] = { ...card, button_label: e.target.value };
+                      setData({ ...data, donate_content: { ...data.donate_content, cards: nextCards } });
+                    }}
+                  />
+                </Field>
+              </div>
+              <Field label="DESCRIPTION">
+                <textarea
+                  className={inputCls}
+                  rows={3}
+                  value={card.description || ''}
+                  onChange={(e) => {
+                    const nextCards = [...(data.donate_content?.cards || [])];
+                    nextCards[index] = { ...card, description: e.target.value };
+                    setData({ ...data, donate_content: { ...data.donate_content, cards: nextCards } });
+                  }}
+                />
+              </Field>
+              <Field label="IMAGE URL">
+                <input
+                  className={inputCls}
+                  value={card.image_url || ''}
+                  onChange={(e) => {
+                    const nextCards = [...(data.donate_content?.cards || [])];
+                    nextCards[index] = { ...card, image_url: e.target.value };
+                    setData({ ...data, donate_content: { ...data.donate_content, cards: nextCards } });
+                  }}
+                />
+              </Field>
+              <Field label="LINK URL">
+                <input
+                  className={inputCls}
+                  value={card.link || ''}
+                  onChange={(e) => {
+                    const nextCards = [...(data.donate_content?.cards || [])];
+                    nextCards[index] = { ...card, link: e.target.value };
+                    setData({ ...data, donate_content: { ...data.donate_content, cards: nextCards } });
+                  }}
+                />
+              </Field>
+            </div>
+          ))}
+          <Btn
+            variant="outline"
+            onClick={() => setData({ ...data, donate_content: { ...data.donate_content, cards: [...(data.donate_content?.cards || []), { title: '', description: '', image_url: '', button_label: '', link: '' }] } })}
+          >+ Add Donation Card</Btn>
+        </div>
+        <div className="mt-4"><Btn onClick={() => save('donate_content', data.donate_content)} data-testid="save-donate-content">Save Donate Content</Btn></div>
+      </section>
     </div>
   );
 };
@@ -427,7 +530,7 @@ const Dashboard = ({ onSignOut }) => {
               title="Events"
               api={eventsApi}
               imageField="image_direct_url"
-              emptyDefaults={{ title: '', date: '', time: '', description: '', image_url: '', order: 0, published: true }}
+              emptyDefaults={{ title: '', date: '', time: '', description: '', image_url: '', gallery_folder_id: '', order: 0, published: true }}
               columns={[
                 { key: 'title', label: 'Title' },
                 { key: 'date', label: 'Date' },
@@ -446,6 +549,9 @@ const Dashboard = ({ onSignOut }) => {
                   <Field label="DESCRIPTION"><textarea className={inputCls} rows={3} value={v.description} onChange={(e) => setV({ ...v, description: e.target.value })} /></Field>
                   <Field label="IMAGE URL (Google Drive or external)">
                     <input className={inputCls} value={v.image_url} onChange={(e) => setV({ ...v, image_url: e.target.value })} />
+                  </Field>
+                  <Field label="GOOGLE DRIVE EVENT FOLDER ID OR SHARE URL">
+                    <input className={inputCls} value={v.gallery_folder_id || ''} onChange={(e) => setV({ ...v, gallery_folder_id: e.target.value })} />
                   </Field>
                   <ImagePreview url={v.image_url} className="w-full aspect-video" />
                   <div className="grid grid-cols-2 gap-4">

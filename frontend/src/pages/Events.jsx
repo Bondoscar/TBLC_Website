@@ -31,7 +31,9 @@ const Events = () => {
                 </div>
                 {e.description && <p className="mt-4 text-white/75 leading-relaxed">{e.description}</p>}
                 <div className="mt-6">
-                  <Link to="/myblc" className="btn-outline">Sign Up <ArrowRight size={14} /></Link>
+                  <Link to={`/gallery/${e.id}`} className="btn-outline">
+                    View Gallery <ArrowRight size={14} />
+                  </Link>
                 </div>
               </div>
             </div>

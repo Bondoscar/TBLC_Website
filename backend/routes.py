@@ -307,6 +307,13 @@ def build_api_router(db: AsyncIOMotorDatabase) -> APIRouter:
             value["hero_direct"] = to_direct_image_url(value.get("hero", ""))
             value["worship_direct"] = to_direct_image_url(value.get("worship", ""))
             value["banner_direct"] = to_direct_image_url(value.get("banner", ""))
+        if key == "donate_content":
+            value["hero_image_direct"] = to_direct_image_url(value.get("hero_image", ""))
+            cards = value.get("cards") or []
+            if isinstance(cards, list):
+                for card in cards:
+                    if isinstance(card, dict):
+                        card["image_direct_url"] = to_direct_image_url(card.get("image_url", ""))
         await db.site_settings.update_one(
             {"key": key},
             {"$set": {"key": key, "value": value, "updated_at": _now_iso()}},

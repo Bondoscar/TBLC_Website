@@ -16,6 +16,7 @@ const EMPTY = {
     social_links: {},
     about_content: { beliefs: [] },
     site_images: {},
+    donate_content: { hero_image: '', hero_title: '', hero_subtitle: '', cards: [] },
   },
 };
 
