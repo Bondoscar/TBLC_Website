@@ -66,7 +66,7 @@ const Give = () => {
                 <div className="p-7">
                   <h3 className="serif-display text-2xl font-semibold">{card.title}</h3>
                   {card.description && <p className="mt-4 text-white/75 leading-relaxed">{card.description}</p>}
-                  <div className="mt-6">
+                  {/* <div className="mt-6">
                     <a
                       href={card.link || card.payment_link || card.url || '#'}
                       className="btn-outline inline-flex items-center gap-2"
@@ -75,7 +75,7 @@ const Give = () => {
                     >
                       {card.button_label || 'Learn More'} <ArrowRight size={14} />
                     </a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             ))}
