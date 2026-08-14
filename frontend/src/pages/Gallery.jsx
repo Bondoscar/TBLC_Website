@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { useSiteData, imgFrom } from '../context/SiteDataContext';
@@ -144,20 +144,20 @@ const Gallery = () => {
     };
   }, [gallerySource]);
 
-  // Lightbox Navigation Helpers
-  const handleNext = () => {
+  // Lightbox Navigation Helpers (wrapped in useCallback for stable references)
+  const handleNext = useCallback(() => {
     if (images.length === 0) return;
     setSelectedIndex((prev) => (prev === null ? 0 : (prev + 1) % images.length));
-  };
+  }, [images.length]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (images.length === 0) return;
     setSelectedIndex((prev) => (prev === null ? 0 : (prev - 1 + images.length) % images.length));
-  };
+  }, [images.length]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setSelectedIndex(null);
-  };
+  }, []);
 
   // Keyboard navigation listener (Left, Right, Escape)
   useEffect(() => {
@@ -170,7 +170,7 @@ const Gallery = () => {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [selectedIndex, images.length]);
+  }, [selectedIndex, handleNext, handlePrev, handleClose]);
 
   // Lock background scrolling when Lightbox is active
   useEffect(() => {
