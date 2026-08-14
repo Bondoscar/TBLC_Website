@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { useSiteData, imgFrom } from '../context/SiteDataContext';
 
+// Google Drive API Key (if provided, fetches folder files directly for custom grid view)
 const DRIVE_API_KEY = process.env.REACT_APP_GOOGLE_DRIVE_API_KEY || '';
 
+// Convert Drive links to high-res thumbnail direct URLs
 const resolveDriveImageUrl = (value = '') => {
   const raw = String(value || '').trim();
   if (!raw) return '';
@@ -15,6 +17,7 @@ const resolveDriveImageUrl = (value = '') => {
   return toSecureUrl(raw);
 };
 
+// Upgrade HTTP links to HTTPS and scrub invalid schemes
 const toSecureUrl = (value = '') => {
   const raw = String(value || '').trim();
   if (!/^https?:\/\//i.test(raw)) return '';
@@ -23,6 +26,7 @@ const toSecureUrl = (value = '') => {
 
 const buildFolderEmbedUrl = (folderId) => `https://drive.google.com/embeddedfolderview?id=${folderId}#grid`;
 
+// Parse gallery field input (determines if input is multiple image URLs or a Drive folder)
 const getGallerySource = (value = '') => {
   const raw = String(value || '').trim();
   if (!raw) return { type: 'none' };
@@ -38,6 +42,7 @@ const getGallerySource = (value = '') => {
   }
 
   const single = pieces[0];
+
   const folderMatch = single.match(/\/folders\/([a-zA-Z0-9-_]+)/);
   if (folderMatch) return { type: 'folder', folderId: folderMatch[1] };
 
@@ -53,6 +58,7 @@ const getGallerySource = (value = '') => {
   return { type: 'none' };
 };
 
+// Fetch list of files from Google Drive API
 const fetchDriveFolderImages = async (folderId) => {
   const query = encodeURIComponent(`'${folderId}' in parents and mimeType contains 'image/' and trashed = false`);
   const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${DRIVE_API_KEY}&fields=files(id,name)&orderBy=name&pageSize=1000`;
@@ -66,11 +72,9 @@ const Gallery = () => {
   const { events } = useSiteData();
   const { eventId } = useParams();
 
-  // Modal Lightbox state (null = closed, number = index of active image)
-  const [lightboxIndex, setLightboxIndex] = useState(null);
+  // Selected image index state (null = closed modal)
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [images, setImages] = useState([]);
-  // Index used for the large in-page preview (hover or explicit selection)
-  const [previewIndex, setPreviewIndex] = useState(0);
   const [iframeFolderId, setIframeFolderId] = useState(null);
   const [galleryLoading, setGalleryLoading] = useState(false);
 
@@ -82,6 +86,12 @@ const Gallery = () => {
     [activeEvent]
   );
 
+  // Close open lightbox modal when active event changes
+  useEffect(() => {
+    setSelectedIndex(null);
+  }, [activeEvent?.id]);
+
+  // Load photos based on gallery source type
   useEffect(() => {
     let cancelled = false;
 
@@ -134,61 +144,60 @@ const Gallery = () => {
     };
   }, [gallerySource]);
 
-  // Reset in-page preview when the image set changes
+  // Lightbox Navigation Helpers
+  const handleNext = () => {
+    if (images.length === 0) return;
+    setSelectedIndex((prev) => (prev === null ? 0 : (prev + 1) % images.length));
+  };
+
+  const handlePrev = () => {
+    if (images.length === 0) return;
+    setSelectedIndex((prev) => (prev === null ? 0 : (prev - 1 + images.length) % images.length));
+  };
+
+  const handleClose = () => {
+    setSelectedIndex(null);
+  };
+
+  // Keyboard navigation listener (Left, Right, Escape)
   useEffect(() => {
-    setPreviewIndex(0);
-  }, [images]);
-
-  // Navigation callbacks
-  const handleNext = useCallback(() => {
-    setLightboxIndex((prev) => (prev !== null ? (prev + 1) % images.length : 0));
-  }, [images.length]);
-
-  const handlePrev = useCallback(() => {
-    setLightboxIndex((prev) => (prev !== null ? (prev - 1 + images.length) % images.length : 0));
-  }, [images.length]);
-
-  const handleClose = useCallback(() => {
-    setLightboxIndex(null);
-  }, []);
-
-  // Keyboard navigation listener
-  useEffect(() => {
-    if (lightboxIndex === null) return;
-
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') handleClose();
-      if (event.key === 'ArrowRight') handleNext();
-      if (event.key === 'ArrowLeft') handlePrev();
+    const onKeyDown = (e) => {
+      if (selectedIndex === null) return;
+      if (e.key === 'Escape') handleClose();
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [lightboxIndex, handleNext, handlePrev, handleClose]);
+  }, [selectedIndex, images.length]);
 
-  // Lock body scroll when modal is active
+  // Lock background scrolling when Lightbox is active
   useEffect(() => {
-    if (lightboxIndex !== null) {
+    if (selectedIndex !== null) {
       document.body.style.overflow = 'hidden';
       return () => {
         document.body.style.overflow = '';
       };
     }
     return undefined;
-  }, [lightboxIndex]);
+  }, [selectedIndex]);
 
   return (
-    <div className="bg-blue-950 text-white" data-testid="gallery-page">
+    <div className="bg-blue-950 text-white min-h-screen" data-testid="gallery-page">
+      {/* Header Section */}
       <section className="pt-16 pb-10 px-6 lg:px-10 text-center">
         <div className="text-xs tracking-[0.3em] text-white/60 mb-3">GALLERY</div>
         <h1 className="hero-title text-4xl md:text-6xl">Event Galleries</h1>
         <p className="mt-5 text-white/70 max-w-[760px] mx-auto">
-          Browse photos from our church events.
+          Browse photo collections from our church events. Click any photo to view in full size.
         </p>
       </section>
 
+      {/* Main Content Layout */}
       <section className="py-12 px-6 lg:px-10">
         <div className="max-w-[1300px] mx-auto grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-8">
+          
           {/* Sidebar */}
           <aside className="border-2 border-white/15 p-5 h-fit">
             <h2 className="serif-display text-xl font-semibold mb-4">Events with galleries</h2>
@@ -233,26 +242,13 @@ const Gallery = () => {
             </div>
           </aside>
 
-          {/* Main Gallery Area */}
+          {/* Main Gallery Display Grid */}
           <div className="border-2 border-white/15 p-4 md:p-6">
             {activeEvent ? (
               <>
-                <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <h2 className="serif-display text-3xl font-semibold">{activeEvent.title}</h2>
-                    {activeEvent.description && <p className="mt-2 text-white/70">{activeEvent.description}</p>}
-                  </div>
-
-                  {/* Primary Trigger Button to Open Lightbox directly */}
-                  {images.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => setLightboxIndex(0)}
-                      className="shrink-0 inline-flex items-center gap-2 bg-white text-blue-950 px-5 py-2.5 font-semibold hover:bg-white/90 transition-colors"
-                    >
-                      <Maximize2 size={16} /> Open Lightbox ({images.length} Photos)
-                    </button>
-                  )}
+                <div className="mb-5">
+                  <h2 className="serif-display text-3xl font-semibold">{activeEvent.title}</h2>
+                  {activeEvent.description && <p className="mt-3 text-white/70">{activeEvent.description}</p>}
                 </div>
 
                 {galleryLoading ? (
@@ -260,49 +256,33 @@ const Gallery = () => {
                     Loading images from source…
                   </div>
                 ) : images.length > 0 ? (
-                  <>
-                    {/* Large in-page preview */}
-                    <div className="mb-6">
-                      <div className="w-full flex items-center justify-center bg-black/10 overflow-hidden border border-white/10 rounded p-4">
-                        <img
-                          src={images[previewIndex]}
-                          alt={`${activeEvent.title} preview ${previewIndex + 1}`}
-                          className="max-h-[60vh] w-full object-contain"
-                          referrerPolicy="no-referrer"
-                        />
-                      </div>
-                      <div className="mt-2 text-center text-xs text-white/60">
-                        Photo {previewIndex + 1} of {images.length}
-                      </div>
-                    </div>
-
-                    {/* Thumbnail strip (hover to preview, click to open lightbox) */}
-                    <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3">
-                      {images.map((image, index) => (
-                        <div key={`${image}-${index}`} className="overflow-hidden border border-white/10 bg-black/20 group">
-                          <button
-                            type="button"
-                            onClick={() => setLightboxIndex(index)}
-                            onMouseEnter={() => setPreviewIndex(index)}
-                            onFocus={() => setPreviewIndex(index)}
-                            className="block w-full text-left relative overflow-hidden"
-                            aria-label={`Preview photo ${index + 1}`}
-                          >
-                            <img
-                              src={image}
-                              alt={`${activeEvent.title} thumb ${index + 1}`}
-                              className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
-                              referrerPolicy="no-referrer"
-                              loading="lazy"
-                            />
-                            <div className="absolute inset-0 bg-blue-950/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-sm font-semibold text-white">
-                              <Maximize2 size={16} /> Open
-                            </div>
-                          </button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {images.map((image, index) => (
+                      <div 
+                        key={`${image}-${index}`} 
+                        className="overflow-hidden border border-white/10 bg-black/20 group cursor-pointer"
+                        onClick={() => setSelectedIndex(index)}
+                      >
+                        <div className="relative overflow-hidden">
+                          <img
+                            src={image}
+                            alt={`${activeEvent.title} thumbnail ${index + 1}`}
+                            className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500"
+                            referrerPolicy="no-referrer"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-blue-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span className="inline-flex items-center gap-2 bg-black/70 px-4 py-2 rounded-full text-xs font-medium tracking-wide border border-white/20">
+                              <Maximize2 size={14} /> Open Photo
+                            </span>
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                  </>
+                        <div className="p-3 border-t border-white/5 bg-white/5 flex justify-between items-center text-xs text-white/60">
+                          <span>Photo {index + 1} of {images.length}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 ) : iframeFolderId ? (
                   <div className="overflow-hidden border border-white/10 bg-black/20">
                     <iframe
@@ -316,7 +296,7 @@ const Gallery = () => {
                   </div>
                 ) : (
                   <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
-                    No gallery is linked for this event yet.
+                    No gallery is linked for this event yet. Please check back later or contact the site administrator.
                   </div>
                 )}
               </>
@@ -329,97 +309,76 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* FULLSCREEN LIGHTBOX POPUP MODAL */}
-      {lightboxIndex !== null && images.length > 0 && (
+      {/* FULL-SCREEN LIGHTBOX POPUP MODAL */}
+      {selectedIndex !== null && images[selectedIndex] && (
         <div
-          className="fixed inset-0 z-[100] bg-black/95 flex flex-col justify-between p-4 md:p-8"
+          className="fixed inset-0 z-[100] flex flex-col justify-between bg-black/95 backdrop-blur-md p-4 md:p-8 animate-fadeIn"
           onClick={handleClose}
-          role="dialog"
-          aria-modal="true"
         >
-          {/* Lightbox Header Bar */}
+          {/* Modal Header Bar */}
           <div
-            className="flex items-center justify-between w-full max-w-6xl mx-auto z-10"
+            className="flex items-center justify-between text-white border-b border-white/10 pb-4 max-w-7xl w-full mx-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="text-sm font-semibold text-white/80 tracking-wider">
-              {activeEvent?.title} — <span className="text-white">Photo {lightboxIndex + 1} of {images.length}</span>
+            <div>
+              <h3 className="text-lg font-semibold">{activeEvent?.title || 'Gallery'}</h3>
+              <p className="text-xs text-white/60">
+                Image {selectedIndex + 1} of {images.length}
+              </p>
             </div>
             <button
               type="button"
               onClick={handleClose}
-              className="inline-flex items-center gap-2 text-sm tracking-[0.2em] bg-white/10 hover:bg-white/20 text-white px-4 py-2 border border-white/20 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 rounded border border-white/20 bg-white/10 hover:bg-white/20 text-xs tracking-widest transition-colors focus:outline-none"
+              aria-label="Close lightbox"
             >
               CLOSE <X size={18} />
             </button>
           </div>
 
-          {/* Main Content Area (Image + Big Floating Next/Back Buttons) */}
+          {/* Lightbox Center Stage with Navigation Controls */}
           <div
-            className="relative flex-1 flex items-center justify-center my-4 max-w-6xl w-full mx-auto"
+            className="relative flex-1 flex items-center justify-between max-w-7xl w-full mx-auto my-4 gap-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Previous Button */}
-            {images.length > 1 && (
+            {/* Previous Image Button */}
+            {images.length > 1 ? (
               <button
                 type="button"
                 onClick={handlePrev}
-                className="absolute left-2 md:left-4 z-20 flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-blue-950/80 hover:bg-blue-900 text-white border border-white/30 transition-all hover:scale-110 shadow-lg"
-                aria-label="Previous photo"
+                className="shrink-0 p-3 md:p-4 rounded-full bg-white/10 hover:bg-white/25 text-white transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+                aria-label="Previous image"
               >
-                <ChevronLeft size={28} />
+                <ChevronLeft size={32} />
               </button>
-            )}
+            ) : <div className="w-12" />}
 
-            {/* Displayed Image */}
-            <div className="relative max-h-[75vh] w-full flex items-center justify-center overflow-hidden">
+            {/* Displayed High-Res Image */}
+            <div className="flex-1 flex items-center justify-center h-full max-h-[75vh] overflow-hidden">
               <img
-                src={images[lightboxIndex]}
-                alt={`Photo ${lightboxIndex + 1} of ${images.length}`}
-                className="max-h-[75vh] max-w-full object-contain select-none"
+                src={images[selectedIndex]}
+                alt={`${activeEvent?.title || 'Gallery'} enlarged view`}
+                className="max-h-[75vh] max-w-full object-contain rounded shadow-2xl select-none"
                 referrerPolicy="no-referrer"
               />
             </div>
 
-            {/* Next Button */}
-            {images.length > 1 && (
+            {/* Next Image Button */}
+            {images.length > 1 ? (
               <button
                 type="button"
                 onClick={handleNext}
-                className="absolute right-2 md:right-4 z-20 flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-blue-950/80 hover:bg-blue-900 text-white border border-white/30 transition-all hover:scale-110 shadow-lg"
-                aria-label="Next photo"
+                className="shrink-0 p-3 md:p-4 rounded-full bg-white/10 hover:bg-white/25 text-white transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+                aria-label="Next image"
               >
-                <ChevronRight size={28} />
+                <ChevronRight size={32} />
               </button>
-            )}
+            ) : <div className="w-12" />}
           </div>
 
-          {/* Lightbox Footer Navigation Controls */}
-          <div
-            className="w-full max-w-md mx-auto flex items-center justify-center gap-4 z-10"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {images.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  className="flex-1 py-2 px-4 bg-white/10 hover:bg-white/20 border border-white/20 text-sm font-semibold flex items-center justify-center gap-2 transition-colors"
-                >
-                  <ChevronLeft size={16} /> Previous
-                </button>
-                <span className="text-xs text-white/60 shrink-0">
-                  {lightboxIndex + 1} / {images.length}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="flex-1 py-2 px-4 bg-white/10 hover:bg-white/20 border border-white/20 text-sm font-semibold flex items-center justify-center gap-2 transition-colors"
-                >
-                  Next <ChevronRight size={16} />
-                </button>
-              </>
-            )}
+          {/* Keyboard Navigation Footer */}
+          <div className="text-center text-xs text-white/40 pt-2 border-t border-white/5 max-w-7xl w-full mx-auto">
+            Use <kbd className="px-1.5 py-0.5 bg-white/10 rounded border border-white/20 font-mono">←</kbd> <kbd className="px-1.5 py-0.5 bg-white/10 rounded border border-white/20 font-mono">→</kbd> keys to navigate, or <kbd className="px-1.5 py-0.5 bg-white/10 rounded border border-white/20 font-mono">ESC</kbd> to exit lightbox.
           </div>
         </div>
       )}
