@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowRight, ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSiteData, imgFrom } from '../context/SiteDataContext';
@@ -143,19 +143,19 @@ const Gallery = () => {
   }, [gallerySource]);
 
   // Handle pop-up navigation helpers
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (images.length === 0) return;
     setSelectedIndex((prev) => (prev === null ? 0 : (prev + 1) % images.length));
-  };
+  }, [images.length]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (images.length === 0) return;
     setSelectedIndex((prev) => (prev === null ? 0 : (prev - 1 + images.length) % images.length));
-  };
+  }, [images.length]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setSelectedIndex(null);
-  };
+  }, []);
 
   // Keyboard controls for the pop-up modal
   useEffect(() => {
@@ -168,7 +168,7 @@ const Gallery = () => {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [selectedIndex, images.length]);
+  }, [selectedIndex, handleNext, handlePrev, handleClose]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
