@@ -302,6 +302,7 @@ const Gallery = () => {
                         </div>
                       ))}
                     </div>
+                  </>
                 ) : iframeFolderId ? (
                   <div className="overflow-hidden border border-white/10 bg-black/20">
                     <iframe
