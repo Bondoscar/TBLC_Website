@@ -5,10 +5,7 @@ import { useSiteData, imgFrom } from '../context/SiteDataContext';
 
 // Optional Google Drive API key. If set, folder-based galleries render as a
 // real image grid (with the in-page modal + next/prev). If NOT set, folder
-// galleries fall back to Google's embedded folder view (an iframe) — no key
-// required, but no custom modal/next-prev since it's cross-origin content.
-// Create React App convention shown below. If you're on Vite, swap this line
-// for: const DRIVE_API_KEY = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY || '';
+// galleries fall back to Google's embedded folder view (an iframe).
 const DRIVE_API_KEY = process.env.REACT_APP_GOOGLE_DRIVE_API_KEY || '';
 
 const resolveDriveImageUrl = (value = '') => {
@@ -21,9 +18,7 @@ const resolveDriveImageUrl = (value = '') => {
   return toSecureUrl(raw);
 };
 
-// Only allow http(s) URLs through, and always upgrade to https — blocks
-// unsafe schemes (javascript:, data:, etc.) an admin might accidentally
-// paste, and guarantees every image is fetched over a secured connection.
+// Block unsafe schemes (javascript:, data:, etc.) and upgrade http to https
 const toSecureUrl = (value = '') => {
   const raw = String(value || '').trim();
   if (!/^https?:\/\//i.test(raw)) return '';
@@ -32,10 +27,6 @@ const toSecureUrl = (value = '') => {
 
 const buildFolderEmbedUrl = (folderId) => `https://drive.google.com/embeddedfolderview?id=${folderId}#grid`;
 
-// Figures out what an event's gallery field points to:
-// - "images": one or more individual image links, ready to render as-is
-// - "folder": a single Google Drive folder link/ID
-// - "none": nothing usable
 const getGallerySource = (value = '') => {
   const raw = String(value || '').trim();
   if (!raw) return { type: 'none' };
@@ -60,8 +51,6 @@ const getGallerySource = (value = '') => {
     return resolved ? { type: 'images', images: [resolved] } : { type: 'none' };
   }
 
-  // A bare alphanumeric string with no URL around it — admins typically
-  // paste this when linking a whole Drive folder, so treat it as a folder ID.
   if (/^[a-zA-Z0-9-_]{15,}$/.test(single)) {
     return { type: 'folder', folderId: single };
   }
@@ -81,7 +70,9 @@ const fetchDriveFolderImages = async (folderId) => {
 const Gallery = () => {
   const { events } = useSiteData();
   const { eventId } = useParams();
-  const [selectedImage, setSelectedImage] = useState(null);
+  
+  // Index-based modal state for cleaner navigation state management
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [images, setImages] = useState([]);
   const [iframeFolderId, setIframeFolderId] = useState(null);
   const [galleryLoading, setGalleryLoading] = useState(false);
@@ -93,6 +84,11 @@ const Gallery = () => {
     () => (activeEvent ? getGallerySource(activeEvent.gallery_folder_id) : { type: 'none' }),
     [activeEvent]
   );
+
+  // Reset selected image pop-up when switching active events
+  useEffect(() => {
+    setSelectedIndex(null);
+  }, [activeEvent?.id]);
 
   useEffect(() => {
     let cancelled = false;
@@ -106,7 +102,6 @@ const Gallery = () => {
       }
 
       if (gallerySource.type === 'folder') {
-        // No API key configured — go straight to the keyless iframe embed.
         if (!DRIVE_API_KEY) {
           setImages([]);
           setIframeFolderId(gallerySource.folderId);
@@ -122,9 +117,6 @@ const Gallery = () => {
             setImages(fetched);
             setIframeFolderId(null);
           } else {
-            // Folder returned nothing (could be genuinely empty, or a
-            // permissions issue) — fall back to the iframe so it's still
-            // viewable one way or another.
             setImages([]);
             setIframeFolderId(gallerySource.folderId);
           }
@@ -150,33 +142,44 @@ const Gallery = () => {
     };
   }, [gallerySource]);
 
+  // Handle pop-up navigation helpers
+  const handleNext = () => {
+    if (images.length === 0) return;
+    setSelectedIndex((prev) => (prev === null ? 0 : (prev + 1) % images.length));
+  };
+
+  const handlePrev = () => {
+    if (images.length === 0) return;
+    setSelectedIndex((prev) => (prev === null ? 0 : (prev - 1 + images.length) % images.length));
+  };
+
+  const handleClose = () => {
+    setSelectedIndex(null);
+  };
+
+  // Keyboard controls for the pop-up modal
   useEffect(() => {
     const onKeyDown = (event) => {
-      if (!selectedImage) return;
-      if (event.key === 'Escape') setSelectedImage(null);
-      if (event.key === 'ArrowRight') {
-        const nextIndex = (selectedImage.index + 1) % images.length;
-        setSelectedImage({ src: images[nextIndex], index: nextIndex });
-      }
-      if (event.key === 'ArrowLeft') {
-        const prevIndex = (selectedImage.index - 1 + images.length) % images.length;
-        setSelectedImage({ src: images[prevIndex], index: prevIndex });
-      }
+      if (selectedIndex === null) return;
+      if (event.key === 'Escape') handleClose();
+      if (event.key === 'ArrowRight') handleNext();
+      if (event.key === 'ArrowLeft') handlePrev();
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [images, selectedImage]);
+  }, [selectedIndex, images.length]);
 
+  // Lock body scroll when modal is open
   useEffect(() => {
-    if (selectedImage) {
+    if (selectedIndex !== null) {
       document.body.style.overflow = 'hidden';
       return () => {
         document.body.style.overflow = '';
       };
     }
     return undefined;
-  }, [selectedImage]);
+  }, [selectedIndex]);
 
   return (
     <div className="bg-blue-950 text-white" data-testid="gallery-page">
@@ -190,6 +193,7 @@ const Gallery = () => {
 
       <section className="py-12 px-6 lg:px-10">
         <div className="max-w-[1300px] mx-auto grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-8">
+          {/* Sidebar */}
           <aside className="border-2 border-white/15 p-5 h-fit">
             <h2 className="serif-display text-xl font-semibold mb-4">Events with galleries</h2>
             <div className="space-y-3">
@@ -202,7 +206,9 @@ const Gallery = () => {
                     <Link
                       key={event.id}
                       to={`/gallery/${event.id}`}
-                      className={`block border p-3 transition-colors ${isActive ? 'border-white bg-white/10' : 'border-white/15 hover:bg-white/10'}`}
+                      className={`block border p-3 transition-colors ${
+                        isActive ? 'border-white bg-white/10' : 'border-white/15 hover:bg-white/10'
+                      }`}
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 shrink-0 overflow-hidden bg-white/10">
@@ -231,6 +237,7 @@ const Gallery = () => {
             </div>
           </aside>
 
+          {/* Main Content Pane */}
           <div className="border-2 border-white/15 p-4 md:p-6">
             {activeEvent ? (
               <>
@@ -246,48 +253,42 @@ const Gallery = () => {
                 ) : images.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                     {images.map((image, index) => (
-                      <div key={`${image}-${index}`} className="overflow-hidden border border-white/10 bg-black/20">
+                      <div key={`${image}-${index}`} className="overflow-hidden border border-white/10 bg-black/20 group">
                         <button
                           type="button"
-                          onClick={() => setSelectedImage({ src: image, index })}
-                          className="group block w-full text-left"
+                          onClick={() => setSelectedIndex(index)}
+                          className="block w-full text-left focus:outline-none"
                         >
-                          <img
-                            src={image}
-                            alt={`${activeEvent.title} gallery ${index + 1}`}
-                            className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500"
-                            referrerPolicy="no-referrer"
-                            loading="lazy"
-                          />
+                          <div className="overflow-hidden">
+                            <img
+                              src={image}
+                              alt={`${activeEvent.title} photo ${index + 1}`}
+                              className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                              referrerPolicy="no-referrer"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="p-3 flex items-center justify-between border-t border-white/5 bg-white/5">
+                            <span className="text-xs text-white/60">Photo {index + 1} of {images.length}</span>
+                            <span className="inline-flex items-center gap-1 text-sm text-white/80 group-hover:text-white transition-colors">
+                              Enlarge <ArrowRight size={14} />
+                            </span>
+                          </div>
                         </button>
-                        <div className="p-3">
-                          <button
-                            type="button"
-                            onClick={() => setSelectedImage({ src: image, index })}
-                            className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white"
-                          >
-                            View picture <ArrowRight size={14} />
-                          </button>
-                        </div>
                       </div>
                     ))}
                   </div>
                 ) : iframeFolderId ? (
-                  <>
-                    <div className="overflow-hidden border border-white/10 bg-black/20">
-                      <iframe
-                        src={buildFolderEmbedUrl(iframeFolderId)}
-                        title={`${activeEvent.title} gallery`}
-                        className="w-full min-h-[560px]"
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
-                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                      />
-                    </div>
-                    {/* <p className="mt-3 text-xs text-white/50">
-                      Images are loaded directly from the linked Google Drive folder. Share the folder as "Anyone with the link" so visitors can view it.
-                    </p> */}
-                  </>
+                  <div className="overflow-hidden border border-white/10 bg-black/20">
+                    <iframe
+                      src={buildFolderEmbedUrl(iframeFolderId)}
+                      title={`${activeEvent.title} gallery`}
+                      className="w-full min-h-[560px]"
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                    />
+                  </div>
                 ) : (
                   <div className="border border-dashed border-white/20 p-10 text-center text-white/60">
                     No gallery is linked for this event yet. Please check back later or contact the site administrator.
@@ -303,50 +304,76 @@ const Gallery = () => {
         </div>
       </section>
 
-      {selectedImage && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-blue-950/95 px-4 py-6" onClick={() => setSelectedImage(null)}>
-          <div className="relative w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
+      {/* FULLSCREEN POP-UP MODAL LIGHTBOX */}
+      {selectedIndex !== null && images[selectedIndex] && (
+        <div
+          className="fixed inset-0 z-[100] flex flex-col justify-between bg-black/95 backdrop-blur-sm p-4 md:p-6"
+          onClick={handleClose}
+        >
+          {/* Top Bar: Title, Counter, Close */}
+          <div
+            className="flex items-center justify-between text-white border-b border-white/10 pb-4 max-w-7xl w-full mx-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div>
+              <h3 className="text-lg font-semibold">{activeEvent?.title || 'Gallery'}</h3>
+              <p className="text-xs text-white/60">
+                Image {selectedIndex + 1} of {images.length}
+              </p>
+            </div>
             <button
               type="button"
-              onClick={() => setSelectedImage(null)}
-              className="absolute right-0 -top-12 flex items-center gap-2 text-sm tracking-[0.2em] text-white/80 hover:text-white"
+              onClick={handleClose}
+              className="flex items-center gap-2 px-3 py-1.5 rounded border border-white/20 bg-white/10 hover:bg-white/20 text-xs tracking-widest transition-colors"
+              aria-label="Close modal"
             >
-              CLOSE <X size={18} />
+              CLOSE <X size={16} />
             </button>
-            <div className="relative overflow-hidden border border-white/10 bg-black/30">
+          </div>
+
+          {/* Main Stage: Prev Button + Image + Next Button */}
+          <div
+            className="relative flex-1 flex items-center justify-between max-w-7xl w-full mx-auto my-4 gap-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Back Button (Outside thumbnail/image frame) */}
+            {images.length > 1 ? (
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="shrink-0 p-3 md:p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+                aria-label="Previous image"
+              >
+                <ChevronLeft size={28} />
+              </button>
+            ) : <div className="w-12" />}
+
+            {/* Displayed Image */}
+            <div className="flex-1 flex items-center justify-center h-full max-h-[75vh] overflow-hidden">
               <img
-                src={selectedImage.src}
-                alt="Selected gallery image"
-                className="w-full max-h-[75vh] object-contain"
+                src={images[selectedIndex]}
+                alt={`${activeEvent?.title || 'Gallery'} enlarged ${selectedIndex + 1}`}
+                className="max-h-[75vh] max-w-full object-contain rounded shadow-2xl select-none"
                 referrerPolicy="no-referrer"
               />
-              {images.length > 1 && (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const prevIndex = (selectedImage.index - 1 + images.length) % images.length;
-                      setSelectedImage({ src: images[prevIndex], index: prevIndex });
-                    }}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-blue-950/70 p-3 text-white hover:bg-blue-950"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft size={22} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const nextIndex = (selectedImage.index + 1) % images.length;
-                      setSelectedImage({ src: images[nextIndex], index: nextIndex });
-                    }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-blue-950/70 p-3 text-white hover:bg-blue-950"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight size={22} />
-                  </button>
-                </>
-              )}
             </div>
+
+            {/* Next Button (Outside thumbnail/image frame) */}
+            {images.length > 1 ? (
+              <button
+                type="button"
+                onClick={handleNext}
+                className="shrink-0 p-3 md:p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+                aria-label="Next image"
+              >
+                <ChevronRight size={28} />
+              </button>
+            ) : <div className="w-12" />}
+          </div>
+
+          {/* Bottom Bar Hints */}
+          <div className="text-center text-xs text-white/40 pt-2">
+            Use <kbd className="px-1.5 py-0.5 bg-white/10 rounded border border-white/20">←</kbd> <kbd className="px-1.5 py-0.5 bg-white/10 rounded border border-white/20">→</kbd> keys to navigate, <kbd className="px-1.5 py-0.5 bg-white/10 rounded border border-white/20">ESC</kbd> to close.
           </div>
         </div>
       )}
