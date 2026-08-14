@@ -69,6 +69,8 @@ const Gallery = () => {
   // Modal Lightbox state (null = closed, number = index of active image)
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [images, setImages] = useState([]);
+  // Index used for the large in-page preview (hover or explicit selection)
+  const [previewIndex, setPreviewIndex] = useState(0);
   const [iframeFolderId, setIframeFolderId] = useState(null);
   const [galleryLoading, setGalleryLoading] = useState(false);
 
@@ -131,6 +133,11 @@ const Gallery = () => {
       cancelled = true;
     };
   }, [gallerySource]);
+
+  // Reset in-page preview when the image set changes
+  useEffect(() => {
+    setPreviewIndex(0);
+  }, [images]);
 
   // Navigation callbacks
   const handleNext = useCallback(() => {
@@ -253,29 +260,48 @@ const Gallery = () => {
                     Loading images from source…
                   </div>
                 ) : images.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                    {images.map((image, index) => (
-                      <div key={`${image}-${index}`} className="overflow-hidden border border-white/10 bg-black/20 group">
-                        <button
-                          type="button"
-                          onClick={() => setLightboxIndex(index)}
-                          className="block w-full text-left relative overflow-hidden"
-                          aria-label={`Open photo ${index + 1} in popup`}
-                        >
-                          <img
-                            src={image}
-                            alt={`${activeEvent.title} gallery ${index + 1}`}
-                            className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500"
-                            referrerPolicy="no-referrer"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-blue-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-sm font-semibold text-white">
-                            <Maximize2 size={18} /> View Photo
-                          </div>
-                        </button>
+                  <>
+                    {/* Large in-page preview */}
+                    <div className="mb-6">
+                      <div className="w-full flex items-center justify-center bg-black/10 overflow-hidden border border-white/10 rounded p-4">
+                        <img
+                          src={images[previewIndex]}
+                          alt={`${activeEvent.title} preview ${previewIndex + 1}`}
+                          className="max-h-[60vh] w-full object-contain"
+                          referrerPolicy="no-referrer"
+                        />
                       </div>
-                    ))}
-                  </div>
+                      <div className="mt-2 text-center text-xs text-white/60">
+                        Photo {previewIndex + 1} of {images.length}
+                      </div>
+                    </div>
+
+                    {/* Thumbnail strip (hover to preview, click to open lightbox) */}
+                    <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3">
+                      {images.map((image, index) => (
+                        <div key={`${image}-${index}`} className="overflow-hidden border border-white/10 bg-black/20 group">
+                          <button
+                            type="button"
+                            onClick={() => setLightboxIndex(index)}
+                            onMouseEnter={() => setPreviewIndex(index)}
+                            onFocus={() => setPreviewIndex(index)}
+                            className="block w-full text-left relative overflow-hidden"
+                            aria-label={`Preview photo ${index + 1}`}
+                          >
+                            <img
+                              src={image}
+                              alt={`${activeEvent.title} thumb ${index + 1}`}
+                              className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
+                              referrerPolicy="no-referrer"
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-blue-950/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-sm font-semibold text-white">
+                              <Maximize2 size={16} /> Open
+                            </div>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                 ) : iframeFolderId ? (
                   <div className="overflow-hidden border border-white/10 bg-black/20">
                     <iframe
